@@ -1,0 +1,296 @@
+{
+  "hero": {
+    "name": "Afsal Ahmed Khan A",
+    "tagline": "Turning ideas into apps, games, and AI-powered experiences.",
+    "roles": [
+      "Android Developer",
+      "Full Stack Developer",
+      "AI Developer"
+    ],
+    "github": "https://github.com/kittyboy06",
+    "linkedin": "https://www.linkedin.com/in/afsal-ahmed-khan-a-9a6062332/",
+    "leetcode": "https://leetcode.com/kittyboy06",
+    "email": "afsalahmed2006@gmail.com",
+    "resumeUrl": "resume.pdf"
+  },
+  "about": {
+    "bio": "2nd-year AIML student at Jerusalem College of Engineering, Chennai. Winner of Cipher Quest (1st Place) and PALS Think2Impact Jury Award. Participated in AMD Slingshot Campus Days, Cyber Connect Hackathon, and multiple AI innovation programs. Building Android apps, full-stack web products, AI systems, and Unity games.",
+    "stats": [
+      {
+        "label": "Projects Shipped",
+        "value": "5",
+        "icon": "rocket"
+      },
+      {
+        "label": "LeetCode Solved",
+        "value": "49",
+        "icon": "zap"
+      },
+      {
+        "label": "CGPA",
+        "value": "8.0",
+        "icon": "target"
+      },
+      {
+        "label": "Year",
+        "value": "2nd CSE",
+        "icon": "graduation-cap"
+      }
+    ],
+    "leetcodeUrl": "https://leetcode.com/kittyboy06"
+  },
+  "achievements": [
+    {
+      "title": "PALS Think2Impact Jury Award Winner",
+      "year": "2026"
+    },
+    {
+      "title": "1st Place - Cipher Quest",
+      "year": "2024"
+    },
+    {
+      "title": "3rd Place - Hacker Arena",
+      "year": "2026"
+    },
+    {
+      "title": "AMD Slingshot Campus Days Ideathon Participant",
+      "year": "2026"
+    },
+    {
+      "title": "RYLA Leadership Program",
+      "year": "2025"
+    }
+  ],
+  "skills": {
+    "categories": [
+      {
+        "name": "Mobile",
+        "items": [
+          "Android",
+          "Kotlin",
+          "Jetpack Compose",
+          "Supabase"
+        ]
+      },
+      {
+        "name": "Web",
+        "items": [
+          "React",
+          "Vite",
+          "Tailwind CSS",
+          "Framer Motion",
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ]
+      },
+      {
+        "name": "Game Dev",
+        "items": [
+          "Unity 6",
+          "C#",
+          "URP",
+          "Cel Shading"
+        ]
+      },
+      {
+        "name": "AI & Backend",
+        "items": [
+          "Gemini API",
+          "Ollama",
+          "Supabase",
+          "Python",
+          "Google Cloud Run",
+          "REST API",
+          "Node.js",
+          "PostgreSQL",
+          "JWT",
+          "Redis"
+        ]
+      },
+      {
+        "name": "Languages",
+        "items": [
+          "Kotlin",
+          "Python",
+          "C++",
+          "JavaScript",
+          "C#"
+        ]
+      },
+      {
+        "name": "Tools",
+        "items": [
+          "Git",
+          "GitHub",
+          "Android Studio",
+          "VS Code",
+          "Figma"
+        ]
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "arise-irl",
+      "title": "ARISE IRL",
+      "description": "Solo Leveling-themed calisthenics RPG Android app. Full gamification with XP, levels, quests, Supabase backend, and Gemini AI coaching.",
+      "tags": [
+        "Android",
+        "Kotlin",
+        "Supabase",
+        "Gemini AI",
+        "Jetpack Compose"
+      ],
+      "status": "In Development",
+      "github": "https://github.com/kittyboy06/arise-irl",
+      "demo": ""
+    },
+    {
+      "id": "neurocart",
+      "title": "NeuroCart",
+      "description": "AI-powered adaptive shopping assistant built for AMD Slingshot Campus Days Chennai Hackathon. React + Vite + Supabase, deployed on Google Cloud Run.",
+      "tags": [
+        "React",
+        "Supabase",
+        "AI",
+        "Google Cloud Run",
+        "Hackathon"
+      ],
+      "status": "Completed",
+      "github": "https://github.com/kittyboy06/neurocart",
+      "demo": "https://neurocart.example.com"
+    },
+    {
+      "id": "magic-embroidery",
+      "title": "Magic Embroidery",
+      "description": "Production ecommerce site for a Chennai embroidery business. Full product catalog, cart, order flow, and admin panel.",
+      "tags": [
+        "React",
+        "Vite",
+        "Supabase",
+        "Tailwind CSS",
+        "Ecommerce"
+      ],
+      "status": "In Development",
+      "github": "https://github.com/kittyboy06/magic-embroidery",
+      "demo": ""
+    },
+    {
+      "id": "aash-player",
+      "title": "Aash Player",
+      "description": "Offline Android music player in Kotlin + Jetpack Compose. Pro equalizer, Mini Capsule overlay, Dynamic Light for Vivo, and lock screen controls.",
+      "tags": [
+        "Android",
+        "Kotlin",
+        "Jetpack Compose",
+        "Music"
+      ],
+      "status": "In Development",
+      "github": "https://github.com/kittyboy06/aash-player",
+      "demo": ""
+    },
+    {
+      "id": "brainos",
+      "title": "BrainOS",
+      "description": "Local Python AI app connecting Ollama LLM to an Obsidian vault via REST API. Tabs for chat, vault assistant, journal, search, and dashboard.",
+      "tags": [
+        "Python",
+        "Ollama",
+        "Obsidian",
+        "AI",
+        "Local LLM"
+      ],
+      "status": "Completed",
+      "github": "https://github.com/kittyboy06/brainos",
+      "demo": ""
+    },
+    {
+      "id": "quantum-pulse",
+      "title": "Quantum Pulse",
+      "description": "Rhythm-based mobile game in Unity 6 with a custom beat-map system, dynamic visual effects, and mobile-optimized input.",
+      "tags": [
+        "Unity 6",
+        "C#",
+        "Game Dev",
+        "Mobile",
+        "Rhythm"
+      ],
+      "status": "In Development",
+      "github": "https://github.com/kittyboy06/quantum-pulse",
+      "demo": ""
+    }
+  ],
+  "timeline": [
+    {
+      "title": "1st Place — Cipher Quest",
+      "org": "Jerusalem College of Engineering",
+      "date": "Oct 2024",
+      "description": "Won the college-level competitive programming event."
+    },
+    {
+      "title": "Built NeuroCart — AMD Slingshot Hackathon, Chennai",
+      "org": "AMD Slingshot Campus Days Chennai",
+      "date": "April 2025",
+      "description": "Built NeuroCart, an AI-powered adaptive shopping assistant, in 24 hours. Deployed on Google Cloud Run."
+    },
+    {
+      "title": "Cyber Connect Hackathon",
+      "org": "Cyber Connect",
+      "date": "Dec 2025",
+      "description": "Participated and built secure web communication platforms."
+    },
+    {
+      "title": "PALS Think2Impact Jury Award Winner",
+      "org": "PALS + Naandi Foundation",
+      "date": "Jan 2026",
+      "description": "Member of Team Phantom Vanguard. Won Jury Award for solving real-world industry challenges."
+    },
+    {
+      "title": "AMD Slingshot Campus Days",
+      "org": "AMD India",
+      "date": "Apr 2026",
+      "description": "Built NeuroCart, an AI-powered adaptive shopping assistant using React, Supabase and AI workflows."
+    },
+    {
+      "title": "RYLA Leadership Program",
+      "org": "Rotaract",
+      "date": "2026",
+      "description": "Completed a 5-day leadership development and personal growth program."
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Complete Full-Stack Web Development Bootcamp",
+      "issuer": "Udemy"
+    },
+    {
+      "name": "Unity 2D RPG: Complete Combat System",
+      "issuer": "Udemy"
+    },
+    {
+      "name": "Agentic Verse STTP",
+      "issuer": "SRMIST"
+    },
+    {
+      "name": "PALS Think2Impact Industry Problem Solving Workshop",
+      "issuer": "PALS"
+    },
+    {
+      "name": "AMD Slingshot Campus Days Ideathon",
+      "issuer": "AMD India"
+    }
+  ],
+  "contact": {
+    "email": "afsalahmed2006@gmail.com",
+    "github": "https://github.com/kittyboy06",
+    "linkedin": "https://www.linkedin.com/in/afsal-ahmed-khan-a-9a6062332/",
+    "leetcode": "https://leetcode.com/kittyboy06"
+  },
+  "footer": {
+    "year": "2026",
+    "name": "Afsal Ahmed Khan A",
+    "github": "https://github.com/kittyboy06",
+    "linkedin": "https://www.linkedin.com/in/afsal-ahmed-khan-a-9a6062332/"
+  }
+}

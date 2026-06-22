@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FAFAF8;
+    color: #1A1A1A;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Custom Selection styling */
+  ::selection {
+    background: #E85D3F;
+    color: #FFFFFF;
+  }
+}
+
+/* Custom Scrollbar for playful theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFAF8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E0DFDB;
+  border-radius: 9999px;
+  border: 2.5px solid #FAFAF8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E85D3F;
+}
+
+/* Custom utility styles for handcrafted joshwcomeau-inspired feel */
+.offset-border {
+  border: 2px solid #1A1A1A;
+}
+
+.offset-shadow-black {
+  box-shadow: 4px 4px 0px 0px #1A1A1A;
+  transition: all 0.2s ease-in-out;
+}
+
+.offset-shadow-black:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #1A1A1A;
+}
+
+.offset-shadow-accent {
+  box-shadow: 4px 4px 0px 0px #E85D3F;
+  transition: all 0.2s ease-in-out;
+}
+
+.offset-shadow-accent:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #E85D3F;
+}
+
+/* Custom scroll snap styling for timeline */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.scroll-snap-align-start {
+  scroll-snap-align: start;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
