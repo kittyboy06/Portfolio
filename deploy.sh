@@ -24,6 +24,8 @@ fi
 echo "======================================="
 echo "RPG PORTFOLIO: SYNCING DIST TO GITHUB PAGES"
 echo "======================================="
+# Clear gh-pages cache to prevent branch conflicts and stale remote ref errors
+rm -rf node_modules/.cache/gh-pages
 npx gh-pages -d dist
 DEPLOY_STATUS=$?
 if [ $DEPLOY_STATUS -ne 0 ]; then
