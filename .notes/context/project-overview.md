@@ -23,6 +23,7 @@ This project is a React + Vite + Tailwind CSS developer portfolio built for **Af
 *   **Workspace Codebase Cleanup**: Removed obsolete `backup_josh_design/` folder, empty `src/hooks/` folder, unused `public/data.json` database, and `deploy.bat` batch script.
 *   **Dependency Pruning**: Removed unused `tabler-icons-react` from `package.json` and updated package lockfile. Verified successful production build compilation.
 *   **Deployment Script Fix**: Fixed `deploy.sh` script failures by clearing the local `gh-pages` cache (`node_modules/.cache/gh-pages`) before publishing. This resolves duplicate branch name conflicts (`fatal: a branch named 'gh-pages' already exists`) and corrupted branch ref failures.
+*   **Repository Untracking & Ignoring `.agents/`**: Untracked `.agents/` from Git and fixed `.gitignore` to use `.agents/` (corrected from `agents/*`) to ensure the folder remains local and is not pushed to the remote repository.
 
 ## Recent Changes (June 19, 2026)
 *   **Portfolio Content Overhaul**: Updated hero tagline and roles (narrowed to Android Dev, Full Stack Dev, AI Dev), rewrote about bio, renamed `experience`→`timeline` with 3 new entries (PALS, AMD, RYLA).
