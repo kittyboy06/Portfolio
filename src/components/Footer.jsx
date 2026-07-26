@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heart, Sparkles, ArrowUp } from 'lucide-react'
+import { Sparkles, ArrowUp } from 'lucide-react'
 
 export default function Footer({ footerData }) {
   const scrollToTop = () => {
@@ -7,8 +7,8 @@ export default function Footer({ footerData }) {
   }
 
   return (
-    <footer className="w-full py-8 px-4 md:px-12 border-t-2 border-[#1A1A1A] bg-white relative z-10">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="w-full relative z-10 pb-16 pt-8 px-4 md:px-12">
+      <div className="max-w-6xl mx-auto bg-white border-2 border-[#1A1A1A] offset-shadow-black rounded-2xl p-6 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-4">
         
         {/* Left: Brand & Built Credit */}
         <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-3 text-center sm:text-left">
