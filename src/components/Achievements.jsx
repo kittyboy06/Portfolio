@@ -29,16 +29,18 @@ export default function Achievements({ achievementsData }) {
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
 
-        {/* Section Heading */}
+        {/* Section Heading with Bordered Container */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+          <div className="text-center mb-12 md:mb-16 flex flex-col items-center">
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3.5 py-1 rounded-full border-2 border-[#E85D3F]/30 mb-3">
               Trophy Room
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Achievements
-            </h2>
-            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
+
+            <div className="inline-block px-6 md:px-8 py-3 rounded-2xl bg-white border-2 border-[#1A1A1A] offset-shadow-black">
+              <h2 className="font-jakarta text-2xl sm:text-3xl md:text-4xl font-black text-[#1A1A1A] uppercase tracking-tight">
+                Achievements & Honors
+              </h2>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -62,7 +64,7 @@ export default function Achievements({ achievementsData }) {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-jakarta font-black text-sm md:text-base uppercase text-[#1A1A1A] tracking-wide leading-snug group-hover:text-[#E85D3F] transition-colors">
+                  <h3 className="font-jakarta font-extrabold text-base md:text-lg text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors text-left leading-snug">
                     {item.title}
                   </h3>
                 </div>

@@ -17,16 +17,18 @@ export default function About({ aboutData }) {
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
-        {/* Section Heading */}
+        {/* Section Heading with Bordered Container */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+          <div className="text-center mb-12 md:mb-16 flex flex-col items-center">
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3.5 py-1 rounded-full border-2 border-[#E85D3F]/30 mb-3">
               Player Status
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Character Profile
-            </h2>
-            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
+
+            <div className="inline-block px-6 md:px-8 py-3 rounded-2xl bg-white border-2 border-[#1A1A1A] offset-shadow-black">
+              <h2 className="font-jakarta text-2xl sm:text-3xl md:text-4xl font-black text-[#1A1A1A] uppercase tracking-tight">
+                Character Profile
+              </h2>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -60,59 +62,41 @@ export default function About({ aboutData }) {
             </ScrollReveal>
           </div>
 
-          {/* Right Block: Bio Lore Box */}
+          {/* Right Block: Bio text card */}
           <div className="md:col-span-8">
-            <ScrollReveal speed={1} direction="up">
-              <div className="bg-white p-6 md:p-8 rounded-2xl border-2 border-[#1A1A1A] offset-shadow-accent relative">
-                <div className="flex items-center space-x-2.5 mb-4 pb-3 border-b-2 border-[#E0DFDB]">
-                  <Shield className="w-5 h-5 text-[#E85D3F]" />
-                  <span className="font-jakarta font-extrabold text-sm uppercase text-[#1A1A1A] tracking-wider">
-                    Biography / Character Lore
-                  </span>
+            <ScrollReveal speed={1.0} direction="up">
+              <div className="rounded-2xl border-2 border-[#1A1A1A] bg-white p-6 md:p-8 offset-shadow-black text-left space-y-4">
+                <div className="flex items-center space-x-2 text-xs font-jakarta font-extrabold uppercase text-[#E85D3F]">
+                  <Shield className="w-4 h-4" />
+                  <span>Class: AIML Student & Full-Stack Engineer</span>
                 </div>
-
-                <p className="text-[#1A1A1A]/90 leading-relaxed font-sans text-base md:text-lg tracking-wide font-medium">
+                
+                <p className="text-[#1A1A1A] font-sans text-base md:text-lg leading-relaxed font-medium">
                   {aboutData.bio}
                 </p>
               </div>
             </ScrollReveal>
           </div>
+
         </div>
 
-        {/* 4 Labeled Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
-          {aboutData.stats.map((stat, index) => {
-            const isLeetCode = stat.label.toLowerCase().includes('leetcode')
-
-            const cardContent = (
-              <div className="relative group p-4 md:p-6 rounded-xl border-2 border-[#1A1A1A] bg-white flex flex-col items-center justify-center text-center offset-shadow-black hover:bg-[#F0EFEB] select-none cursor-pointer h-full">
-                <span className="font-jakarta font-black text-4xl md:text-5xl text-[#E85D3F] group-hover:scale-105 transition-transform duration-200">
-                  {stat.value}
-                </span>
-                <span className="font-jakarta font-extrabold text-[10px] md:text-xs text-[#666666] tracking-widest uppercase mt-2.5">
-                  {stat.label}
-                </span>
-              </div>
-            )
-
-            return (
-              <ScrollReveal key={index} delay={index * 0.08} speed={1 + index * 0.05}>
-                {isLeetCode ? (
-                  <a 
-                    href={aboutData.leetcodeUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block h-full"
-                  >
-                    {cardContent}
-                  </a>
-                ) : (
-                  cardContent
-                )}
+        {/* Stats Section Cards */}
+        {aboutData.stats && aboutData.stats.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 w-full">
+            {aboutData.stats.map((stat, idx) => (
+              <ScrollReveal key={stat.label} delay={idx * 0.1} speed={1.2}>
+                <div className="group rounded-xl border-2 border-[#1A1A1A] bg-white p-4 md:p-6 text-center offset-shadow-black hover:bg-[#F0EFEB] transition-all">
+                  <div className="font-jakarta text-3xl md:text-5xl font-black text-[#E85D3F]">
+                    {stat.value}
+                  </div>
+                  <div className="font-jakarta text-xs md:text-sm font-extrabold text-[#1A1A1A] uppercase tracking-wider mt-2">
+                    {stat.label}
+                  </div>
+                </div>
               </ScrollReveal>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

@@ -14,16 +14,18 @@ export default function Skills({ skillsData }) {
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
-        {/* Section Heading */}
+        {/* Section Heading with Bordered Container */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#4F46E5] uppercase bg-[#4F46E5]/10 px-3 py-1 rounded border-2 border-[#4F46E5]/30">
+          <div className="text-center mb-12 md:mb-16 flex flex-col items-center">
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#4F46E5] uppercase bg-[#4F46E5]/10 px-3.5 py-1 rounded-full border-2 border-[#4F46E5]/30 mb-3">
               Player Talents
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Skill Attributes
-            </h2>
-            <div className="w-16 h-[4px] bg-[#4F46E5] mx-auto mt-4 rounded-full"></div>
+
+            <div className="inline-block px-6 md:px-8 py-3 rounded-2xl bg-white border-2 border-[#1A1A1A] offset-shadow-black">
+              <h2 className="font-jakarta text-2xl sm:text-3xl md:text-4xl font-black text-[#1A1A1A] uppercase tracking-tight">
+                Skill Attributes
+              </h2>
+            </div>
           </div>
         </ScrollReveal>
 

@@ -44,61 +44,65 @@ export default function Contact({ contactData }) {
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
-        {/* Section Heading */}
+        {/* Section Heading with Bordered Container */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+          <div className="text-center mb-12 md:mb-16 flex flex-col items-center">
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3.5 py-1 rounded-full border-2 border-[#E85D3F]/30 mb-3">
               Get in Touch
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Initiate Contact
-            </h2>
-            <p className="font-jakarta text-xs md:text-sm text-[#666666] tracking-wider uppercase font-bold mt-2">
+
+            <div className="inline-block px-6 md:px-8 py-3 rounded-2xl bg-white border-2 border-[#1A1A1A] offset-shadow-black">
+              <h2 className="font-jakarta text-2xl sm:text-3xl md:text-4xl font-black text-[#1A1A1A] uppercase tracking-tight">
+                Initiate Contact
+              </h2>
+            </div>
+            
+            <p className="font-jakarta text-xs md:text-sm text-[#666666] tracking-wider uppercase font-bold mt-3">
               Open for software roles, app projects & AI collaborations
             </p>
-            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
           </div>
         </ScrollReveal>
 
-        {/* 4 Clickable Grid Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full">
+        {/* Contact Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
           {cards.map((card, index) => {
-            const IconComp = card.icon
+            const IconComponent = card.icon
+
             return (
-              <ScrollReveal key={index} delay={index * 0.08} speed={1 + index * 0.05}>
+              <ScrollReveal key={card.label} delay={index * 0.08} speed={1 + index * 0.05}>
                 <a 
                   href={card.href}
-                  target="_blank"
+                  target={card.href.startsWith('mailto') ? '_self' : '_blank'}
                   rel="noopener noreferrer"
-                  className="group relative flex flex-col justify-between h-full rounded-2xl border-2 border-[#1A1A1A] bg-white p-6 offset-shadow-black hover:bg-[#F0EFEB] transition-all cursor-pointer"
+                  className="group relative flex flex-col justify-between h-full bg-white p-6 rounded-2xl border-2 border-[#1A1A1A] offset-shadow-black hover:bg-[#F0EFEB] transition-all overflow-hidden text-left"
                 >
                   <div className="space-y-4">
-                    {/* Icon + Badge */}
+                    {/* Header: Icon + Badge */}
                     <div className="flex items-center justify-between">
-                      <div className="p-2.5 rounded-lg border-2 border-[#1A1A1A] bg-[#FAFAF8] text-[#1A1A1A] group-hover:bg-[#E85D3F] group-hover:text-white transition-colors">
-                        <IconComp className="w-5 h-5" />
+                      <div className="p-2.5 rounded-lg border-2 border-[#1A1A1A] bg-[#FAFAF8] text-[#1A1A1A] group-hover:bg-[#E85D3F] group-hover:text-white transition-colors duration-200">
+                        <IconComponent className="w-5 h-5" />
                       </div>
-                      
-                      <span className="font-jakarta text-[9px] font-extrabold uppercase tracking-wider text-[#666666] bg-[#F0EFEB] border border-[#E0DFDB] px-2 py-0.5 rounded">
+
+                      <span className="font-mono text-[9px] font-extrabold uppercase tracking-wider text-[#666666] bg-[#F0EFEB] border border-[#E0DFDB] px-2 py-0.5 rounded-full">
                         {card.badgeText}
                       </span>
                     </div>
 
-                    {/* Detail */}
-                    <div className="space-y-1 pt-2">
-                      <span className="font-jakarta text-[10px] text-[#666666] font-extrabold uppercase tracking-widest block">
+                    {/* Label & Value */}
+                    <div>
+                      <span className="font-jakarta text-xs font-extrabold uppercase text-[#E85D3F] tracking-wider">
                         {card.label}
                       </span>
-                      <span className="font-jakarta font-black text-sm text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors break-all leading-snug">
+                      <p className="font-jakarta font-black text-sm md:text-base text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors truncate mt-1">
                         {card.value}
-                      </span>
+                      </p>
                     </div>
                   </div>
 
-                  {/* Card Footer Link Trigger */}
-                  <div className="flex items-center justify-between pt-4 mt-6 border-t border-[#E0DFDB] text-xs font-jakarta font-extrabold uppercase text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors">
+                  {/* Action Link Footer */}
+                  <div className="flex items-center justify-between pt-4 mt-4 border-t border-[#E0DFDB] font-jakarta text-xs font-extrabold uppercase tracking-wider text-[#1A1A1A] group-hover:text-[#E85D3F]">
                     <span>Connect</span>
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </div>
                 </a>
               </ScrollReveal>
