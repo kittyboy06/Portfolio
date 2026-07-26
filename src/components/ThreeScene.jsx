@@ -5,8 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
  * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls.
- * Allows user click-and-drag rotation control, constrained to front-facing angles
- * to ensure the model's back is never exposed.
+ * Shifted vertically downwards for perfect vertical centering inside the card box.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -21,7 +20,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-    camera.position.set(0, 0.2, 4.2)
+    camera.position.set(0, -0.25, 4.2) // Shifted camera target downwards for centering
 
     // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({ 
@@ -39,12 +38,13 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     controls.dampingFactor = 0.08
     controls.enableZoom = false  // Keep scale fixed inside card
     controls.enablePan = false   // Keep position centered inside card
+    controls.target.set(0, -0.25, 0) // Align orbit center with lowered camera
     
     // Clamp rotation angles so the back of the model is NEVER shown
-    controls.minAzimuthAngle = -Math.PI / 3  // -60 deg left
-    controls.maxAzimuthAngle = Math.PI / 3   // +60 deg right
-    controls.minPolarAngle = Math.PI / 3.2   // Tilt up limit
-    controls.maxPolarAngle = Math.PI / 1.8   // Tilt down limit
+    controls.minAzimuthAngle = -Math.PI / 3.5  // -50 deg left
+    controls.maxAzimuthAngle = Math.PI / 3.5   // +50 deg right
+    controls.minPolarAngle = Math.PI / 3.2     // Tilt up limit
+    controls.maxPolarAngle = Math.PI / 1.8     // Tilt down limit
 
     // Main 3D Model Group
     const modelGroup = new THREE.Group()
@@ -70,7 +70,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
         loadedModel.position.sub(center)
 
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 2.8 / (maxDim || 1)
+        const targetScale = 2.7 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         loadedModel.traverse((child) => {
@@ -133,7 +133,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     coralPointLight.position.set(2, 2, 3)
     scene.add(coralPointLight)
 
-    // 7. Animation Render Loop (No automatic 360° spin, user controls rotation)
+    // 7. Animation Render Loop (Gentle breathing movement centered vertically)
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -141,12 +141,11 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       animationFrameId = requestAnimationFrame(animate)
       const elapsedTime = clock.getElapsedTime()
 
-      // Update OrbitControls dampening
       controls.update()
 
-      // Subtle gentle breathing movement without turning model around
+      // Gentle vertical float wave centered lower
       if (modelGroup) {
-        modelGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.04
+        modelGroup.position.y = -0.3 + Math.sin(elapsedTime * 1.5) * 0.03
       }
 
       particleSystem.rotation.y = -elapsedTime * 0.05

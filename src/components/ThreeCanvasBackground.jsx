@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with mouse.glb Model
- * Rotation is clamped to front-facing angles so the back of the model is never exposed.
+ * Vertically aligned lower for clean proportioning.
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -146,7 +146,7 @@ export default function ThreeCanvasBackground() {
       return Math.max(0, Math.min(1, window.scrollY / totalScroll))
     }
 
-    // 7. Render Loop (Clamped front-facing angles)
+    // 7. Render Loop (Lowered vertical targets)
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -163,32 +163,32 @@ export default function ThreeCanvasBackground() {
 
       // Calculate 3D Targets based on smoothScrollP (0.0 -> 1.0)
       let targetX = 0
-      let targetY = 0
+      let targetY = -0.3
       let targetZ = 0
       let targetScale = 1
 
       if (smoothScrollP < 0.25) {
         const t = smoothScrollP / 0.25
         targetX = lerp(2.0, -2.2, t)
-        targetY = lerp(0.1, -0.1, t)
+        targetY = lerp(-0.2, -0.4, t)
         targetZ = lerp(0, 0.4, t)
         targetScale = lerp(1, 1.15, t)
       } else if (smoothScrollP < 0.5) {
         const t = (smoothScrollP - 0.25) / 0.25
         targetX = lerp(-2.2, 2.0, t)
-        targetY = lerp(-0.1, 0.3, t)
+        targetY = lerp(-0.4, 0.1, t)
         targetZ = lerp(0.4, 0.8, t)
         targetScale = lerp(1.15, 1.25, t)
       } else if (smoothScrollP < 0.75) {
         const t = (smoothScrollP - 0.5) / 0.25
         targetX = lerp(2.0, 0, t)
-        targetY = lerp(0.3, 0, t)
+        targetY = lerp(0.1, -0.2, t)
         targetZ = lerp(0.8, 1.5, t)
         targetScale = lerp(1.25, 1.4, t)
       } else {
         const t = (smoothScrollP - 0.75) / 0.25
         targetX = lerp(0, 0, t)
-        targetY = lerp(0, -0.2, t)
+        targetY = lerp(-0.2, -0.4, t)
         targetZ = lerp(1.5, 2.5, t)
         targetScale = lerp(1.4, 1.7, t)
       }
@@ -201,7 +201,7 @@ export default function ThreeCanvasBackground() {
       modelGroup.scale.y = lerp(modelGroup.scale.y, targetScale, 0.08)
       modelGroup.scale.z = lerp(modelGroup.scale.z, targetScale, 0.08)
 
-      // CLAMPED ROTATION: Only tilt subtly so the back is NEVER exposed
+      // CLAMPED ROTATION: Only tilt subtly
       modelGroup.rotation.x = Math.sin(elapsedTime * 0.6) * 0.12 + mouseY * 0.35
       modelGroup.rotation.y = Math.cos(elapsedTime * 0.5) * 0.18 + mouseX * 0.45
       modelGroup.rotation.z = Math.sin(elapsedTime * 0.4) * 0.05
