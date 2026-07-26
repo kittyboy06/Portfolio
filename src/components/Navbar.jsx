@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, Github, Linkedin, FileText } from 'lucide-react'
+import { Menu, X, Github, Linkedin, FileText, Sparkles } from 'lucide-react'
 
 // Custom high-fidelity LeetCode SVG Icon
 export function LeetCodeIcon({ className = "w-5 h-5" }) {
@@ -17,13 +17,38 @@ export function LeetCodeIcon({ className = "w-5 h-5" }) {
 
 export default function Navbar({ heroData }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('hero')
   const location = useLocation()
   const navigate = useNavigate()
+
+  // Track Active Section on Scroll
+  useEffect(() => {
+    const navItems = ['hero', 'about', 'achievements', 'skills', 'projects', 'experience', 'contact']
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200
+      for (const sectionId of navItems) {
+        const el = document.getElementById(sectionId)
+        if (el) {
+          const top = el.offsetTop
+          const height = el.offsetHeight
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(sectionId)
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   if (!heroData) return null
 
   const handleNavClick = (sectionId) => {
     setMobileMenuOpen(false)
+    setActiveSection(sectionId)
     if (location.pathname !== '/') {
       navigate('/')
       setTimeout(() => {
@@ -36,76 +61,96 @@ export default function Navbar({ heroData }) {
     }
   }
 
+  const navLinks = [
+    { id: 'about', label: 'About' },
+    { id: 'achievements', label: 'Awards' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'experience', label: 'Timeline' },
+    { id: 'contact', label: 'Contact' },
+  ]
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-theme-bg/85 backdrop-blur-md border-b-2 border-theme-text py-4 px-6 md:px-12 transition-all duration-300">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo (Bold display) */}
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-50 transition-all duration-300">
+      <div className="glass-strong rounded-full px-5 py-3 flex items-center justify-between border border-white/15 shadow-[0_10px_35px_-5px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+        {/* Brand / Logo */}
         <Link 
           to="/" 
           onClick={() => handleNavClick('hero')} 
-          className="font-jakarta text-xl md:text-2xl font-black text-theme-text tracking-tight uppercase hover:text-theme-accent transition-colors duration-200"
+          className="flex items-center space-x-2.5 font-jakarta text-sm md:text-base font-extrabold tracking-tight group"
         >
-          Afsal Ahmed
+          <span className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 via-cyan-400 to-violet-500 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform">
+            <Sparkles className="w-4 h-4 fill-slate-950" />
+          </span>
+          <span className="text-slate-100 group-hover:text-cyan-400 transition-colors uppercase tracking-wider font-extrabold">
+            Afsal
+          </span>
         </Link>
 
-        {/* Desktop Main Links */}
-        <div className="hidden md:flex items-center space-x-8 font-jakarta font-extrabold text-sm tracking-wider">
-          {['about', 'work', 'experience', 'contact'].map((item) => (
-            <button
-              key={item}
-              onClick={() => handleNavClick(item)}
-              className="text-theme-text/80 hover:text-theme-accent transition-colors duration-200 uppercase relative group"
-            >
-              {item}
-              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-theme-accent transition-all duration-200 group-hover:w-full"></span>
-            </button>
-          ))}
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center space-x-1 font-jakarta font-semibold text-xs uppercase tracking-wider bg-white/5 p-1 rounded-full border border-white/10">
+          {navLinks.map((item) => {
+            const isActive = activeSection === item.id
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`px-4 py-2 rounded-full transition-all duration-200 relative ${
+                  isActive 
+                    ? 'text-slate-950 font-bold bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]' 
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {item.label}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Desktop Socials & Resume (Handcrafted Offset style) */}
-        <div className="hidden md:flex items-center space-x-5">
+        {/* Desktop Socials & Resume Pill */}
+        <div className="hidden md:flex items-center space-x-3">
           <a 
             href={heroData.github} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-theme-text/80 hover:text-theme-accent transition-colors duration-200"
+            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
             title="GitHub"
           >
-            <Github className="w-5 h-5 hover:scale-110 active:scale-95 transition-transform" />
+            <Github className="w-4 h-4" />
           </a>
           <a 
             href={heroData.linkedin} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-theme-text/80 hover:text-theme-accent transition-colors duration-200"
+            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
             title="LinkedIn"
           >
-            <Linkedin className="w-5 h-5 hover:scale-110 active:scale-95 transition-transform" />
+            <Linkedin className="w-4 h-4" />
           </a>
           <a 
             href={heroData.leetcode} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-theme-text/80 hover:text-theme-accent transition-colors duration-200"
+            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
             title="LeetCode"
           >
-            <LeetCodeIcon className="w-5 h-5 hover:scale-110 active:scale-95 transition-transform" />
+            <LeetCodeIcon className="w-4 h-4" />
           </a>
           <a 
             href={heroData.resumeUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center space-x-2 font-jakarta font-extrabold text-xs uppercase px-4 py-2 rounded-lg border-2 border-theme-text bg-theme-card offset-shadow-black hover:bg-theme-accent hover:text-white transition-colors duration-200"
+            className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all"
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Resume</span>
+            <span>CV</span>
           </a>
         </div>
 
-        {/* Mobile Burger Toggle */}
+        {/* Mobile Hamburger Button */}
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-theme-text hover:text-theme-accent transition-colors focus:outline-none"
+          className="md:hidden p-2 text-slate-200 hover:text-cyan-400 focus:outline-none"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -113,41 +158,43 @@ export default function Navbar({ heroData }) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] bg-theme-bg/95 backdrop-blur-lg border-t-2 border-theme-text flex flex-col justify-between p-8 z-40 transition-all duration-300">
-          <div className="flex flex-col space-y-6 font-jakarta font-extrabold text-lg tracking-widest text-center">
-            {['about', 'work', 'experience', 'contact'].map((item) => (
+        <div className="md:hidden mt-3 glass-strong rounded-3xl p-6 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="flex flex-col space-y-2 font-jakarta font-semibold text-sm uppercase tracking-wider">
+            {navLinks.map((item) => (
               <button
-                key={item}
-                onClick={() => handleNavClick(item)}
-                className="text-theme-text hover:text-theme-accent transition-colors duration-200 py-2 uppercase border-b-2 border-theme-border"
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`text-left px-4 py-2.5 rounded-xl transition-all ${
+                  activeSection === item.id
+                    ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30'
+                    : 'text-slate-300 hover:bg-white/5'
+                }`}
               >
-                {item}
+                {item.label}
               </button>
             ))}
           </div>
 
-          <div className="flex flex-col items-center space-y-6 pb-12">
-            {/* Social Icons */}
-            <div className="flex space-x-8">
-              <a href={heroData.github} target="_blank" rel="noopener noreferrer" className="text-theme-text hover:text-theme-accent transition-colors">
-                <Github className="w-7 h-7" />
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+            <div className="flex space-x-3">
+              <a href={heroData.github} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+                <Github className="w-5 h-5" />
               </a>
-              <a href={heroData.linkedin} target="_blank" rel="noopener noreferrer" className="text-theme-text hover:text-theme-accent transition-colors">
-                <Linkedin className="w-7 h-7" />
+              <a href={heroData.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+                <Linkedin className="w-5 h-5" />
               </a>
-              <a href={heroData.leetcode} target="_blank" rel="noopener noreferrer" className="text-theme-text hover:text-theme-accent transition-colors">
-                <LeetCodeIcon className="w-7 h-7" />
+              <a href={heroData.leetcode} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+                <LeetCodeIcon className="w-5 h-5" />
               </a>
             </div>
-            {/* Resume Button */}
             <a 
               href={heroData.resumeUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center justify-center space-x-2 w-full font-jakarta font-extrabold text-sm uppercase py-3.5 rounded-lg border-2 border-theme-text bg-theme-card offset-shadow-black hover:bg-theme-accent hover:text-white transition-all duration-200"
+              className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase px-4 py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg"
             >
               <FileText className="w-4 h-4" />
-              <span>Download Resume</span>
+              <span>Resume</span>
             </a>
           </div>
         </div>

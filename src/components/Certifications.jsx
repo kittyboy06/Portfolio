@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { BadgeCheck, GraduationCap } from 'lucide-react'
+import { BadgeCheck, GraduationCap, Award } from 'lucide-react'
 
 export default function Certifications({ certificationsData }) {
   if (!certificationsData || certificationsData.length === 0) return null
@@ -10,36 +10,36 @@ export default function Certifications({ certificationsData }) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08
+        staggerChildren: 0.1
       }
     }
   }
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 25 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: 'spring', damping: 15 }
+      transition: { type: 'spring', damping: 18, stiffness: 120 }
     }
   }
 
   return (
     <section
       id="certifications"
-      className="relative py-12 md:py-24 px-4 md:px-12 bg-theme-bg border-t-2 border-theme-text overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
 
         {/* Section Heading */}
-        <div className="text-center mb-8 md:mb-16">
-          <span className="font-jakarta text-xs font-extrabold tracking-widest text-emerald-400 uppercase bg-emerald-400/10 px-3 py-1 rounded border-2 border-emerald-400/30">
-            Skill Tree
+        <div className="text-center mb-12 md:mb-16">
+          <span className="font-jakarta text-xs font-extrabold tracking-widest text-emerald-400 uppercase px-4 py-1.5 rounded-full glass border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            VERIFIED CREDENTIALS
           </span>
-          <h2 className="font-jakarta text-3xl md:text-5xl font-black text-theme-text mt-3 uppercase tracking-tight">
+          <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
             Certifications
           </h2>
-          <div className="w-16 h-[4px] bg-emerald-400 mx-auto mt-4 rounded-full"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.8)]"></div>
         </div>
 
         {/* Certifications Grid */}
@@ -48,27 +48,27 @@ export default function Certifications({ certificationsData }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 w-full"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
         >
           {certificationsData.map((cert, index) => (
             <motion.div
               key={index}
               variants={cardVariants}
-              className="group bg-theme-card p-5 rounded-xl border-2 border-theme-text offset-shadow-black hover:bg-theme-surface transition-colors select-none flex items-start space-x-4"
+              className="group glass glass-hover p-6 rounded-3xl border border-white/15 shadow-xl select-none flex items-start space-x-4"
             >
               {/* Badge Icon */}
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-emerald-400/15 border-2 border-emerald-400/30 flex items-center justify-center">
-                <BadgeCheck className="w-5 h-5 text-emerald-400" />
+              <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+                <BadgeCheck className="w-6 h-6" />
               </div>
 
-              {/* Text */}
+              {/* Text Detail */}
               <div className="min-w-0">
-                <h3 className="font-jakarta font-black text-sm uppercase text-theme-text tracking-wide leading-snug group-hover:text-emerald-400 transition-colors">
+                <h3 className="font-jakarta font-extrabold text-base uppercase text-white tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
                   {cert.name}
                 </h3>
-                <div className="flex items-center space-x-1.5 mt-2">
-                  <GraduationCap className="w-3 h-3 text-theme-muted flex-shrink-0" />
-                  <span className="font-jakarta font-extrabold text-[10px] text-theme-muted tracking-widest uppercase">
+                <div className="flex items-center space-x-1.5 mt-2.5">
+                  <GraduationCap className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span className="font-mono text-xs text-slate-300 font-semibold uppercase tracking-wider">
                     {cert.issuer}
                   </span>
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Trophy, Award, Medal } from 'lucide-react'
+import { Trophy, Award, Medal, Star } from 'lucide-react'
 
 export default function Achievements({ achievementsData }) {
   if (!achievementsData || achievementsData.length === 0) return null
@@ -20,45 +20,35 @@ export default function Achievements({ achievementsData }) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: 'spring', damping: 15 }
+      transition: { type: 'spring', damping: 18, stiffness: 120 }
     }
   }
 
-  // Pick icon based on title keywords
   const getIcon = (title) => {
     const lower = title.toLowerCase()
-    if (lower.includes('1st') || lower.includes('winner') || lower.includes('award'))
+    if (lower.includes('1st') || lower.includes('winner') || lower.includes('jury'))
       return Trophy
     if (lower.includes('3rd') || lower.includes('place'))
       return Medal
     return Award
   }
 
-  // Accent color per card for visual variety
-  const accentColors = [
-    'bg-yellow-400/20 border-yellow-400/40 text-yellow-400',
-    'bg-theme-accent/20 border-theme-accent/40 text-theme-accent',
-    'bg-orange-400/20 border-orange-400/40 text-orange-400',
-    'bg-blue-400/20 border-blue-400/40 text-blue-400',
-    'bg-green-400/20 border-green-400/40 text-green-400',
-  ]
-
   return (
     <section
       id="achievements"
-      className="relative py-12 md:py-24 px-4 md:px-12 bg-theme-bg border-t-2 border-theme-text overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
 
         {/* Section Heading */}
-        <div className="text-center mb-8 md:mb-16">
-          <span className="font-jakarta text-xs font-extrabold tracking-widest text-yellow-400 uppercase bg-yellow-400/10 px-3 py-1 rounded border-2 border-yellow-400/30">
-            Trophy Room
+        <div className="text-center mb-12 md:mb-16">
+          <span className="font-jakarta text-xs font-extrabold tracking-widest text-amber-400 uppercase px-4 py-1.5 rounded-full glass border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+            AWARDS & RECOGNITION
           </span>
-          <h2 className="font-jakarta text-3xl md:text-5xl font-black text-theme-text mt-3 uppercase tracking-tight">
+          <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
             Achievements
           </h2>
-          <div className="w-16 h-[4px] bg-yellow-400 mx-auto mt-4 rounded-full"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.8)]"></div>
         </div>
 
         {/* Achievement Cards Grid */}
@@ -67,32 +57,37 @@ export default function Achievements({ achievementsData }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
         >
           {achievementsData.map((item, index) => {
             const IconComp = getIcon(item.title)
-            const colorClass = accentColors[index % accentColors.length]
 
             return (
               <motion.div
                 key={index}
                 variants={cardVariants}
-                className="group relative bg-theme-card p-5 md:p-6 rounded-xl border-2 border-theme-text offset-shadow-black hover:bg-theme-surface transition-colors select-none"
+                className="group glass glass-hover p-6 rounded-3xl border border-white/15 shadow-xl relative select-none flex flex-col justify-between"
               >
                 {/* Icon + Year Badge */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center ${colorClass}`}>
-                    <IconComp className="w-5 h-5" />
+                <div className="flex items-start justify-between mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500/20 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+                    <IconComp className="w-6 h-6" />
                   </div>
-                  <span className="font-jakarta font-black text-xs bg-theme-surface border-2 border-theme-text px-2.5 py-1 rounded-full text-theme-muted tracking-wider">
+                  <span className="font-mono font-bold text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-300">
                     {item.year}
                   </span>
                 </div>
 
                 {/* Title */}
-                <h3 className="font-jakarta font-black text-sm md:text-base uppercase text-theme-text tracking-wide leading-snug group-hover:text-theme-accent transition-colors">
-                  {item.title}
-                </h3>
+                <div>
+                  <h3 className="font-jakarta font-extrabold text-base md:text-lg text-white uppercase tracking-tight leading-snug group-hover:text-amber-300 transition-colors">
+                    {item.title}
+                  </h3>
+                  <div className="flex items-center space-x-1 mt-3 text-amber-400/70">
+                    <Star className="w-3.5 h-3.5 fill-amber-400/50" />
+                    <span className="text-[11px] font-mono uppercase text-slate-400">HONOR AWARD</span>
+                  </div>
+                </div>
               </motion.div>
             )
           })}
