@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { 
   Github, 
   ExternalLink, 
@@ -11,7 +11,6 @@ import {
 } from 'lucide-react'
 import ScrollReveal from './ScrollReveal'
 
-// Helper to assign an icon to each project
 const getProjectIcon = (id) => {
   switch (id) {
     case 'arise-irl':
@@ -38,20 +37,20 @@ export default function Projects({ projectsData }) {
   return (
     <section 
       id="projects" 
-      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden border-t-2 border-[#1A1A1A]"
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
         {/* Section Heading */}
         <ScrollReveal speed={0.8}>
           <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest gradient-text-cyan uppercase px-4 py-1.5 rounded-full glass border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-              PORTFOLIO SHOWCASE
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+              Selected Work
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
-              Shipped Projects
+            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
+              Active Quests
             </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)]"></div>
+            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
           </div>
         </ScrollReveal>
 
@@ -60,7 +59,7 @@ export default function Projects({ projectsData }) {
           {projectsData.map((project, index) => {
             const IconComp = getProjectIcon(project.id)
             const isCompleted = project.status.toLowerCase() === 'completed'
-            const isFeatured = project.id === 'neurocart' // Featured card
+            const isFeatured = project.id === 'neurocart'
 
             if (isFeatured) {
               return (
@@ -70,13 +69,13 @@ export default function Projects({ projectsData }) {
                 >
                   <ScrollReveal delay={0.1} speed={1.1}>
                     {/* Featured Card */}
-                    <div className="group glass glass-hover glass-spotlight relative flex flex-col justify-between h-full rounded-3xl border border-white/15 p-6 md:p-8 shadow-xl overflow-hidden">
+                    <div className="group relative flex flex-col justify-between h-full rounded-2xl border-2 border-[#1A1A1A] bg-white p-6 md:p-8 offset-shadow-accent hover:bg-[#F0EFEB] overflow-hidden">
                       {/* Status Badge */}
                       <span 
-                        className={`absolute top-6 right-6 font-mono font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full border ${
+                        className={`absolute top-6 right-6 font-jakarta font-extrabold text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border-2 ${
                           isCompleted 
-                            ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
-                            : 'bg-amber-500/10 border-amber-500/40 text-amber-400'
+                            ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600'
+                            : 'bg-amber-500/10 border-amber-500/60 text-amber-600'
                         }`}
                       >
                         {project.status}
@@ -86,19 +85,19 @@ export default function Projects({ projectsData }) {
                         {/* Left: Content */}
                         <div className="md:col-span-7 space-y-4 text-left">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                            <div className="p-2.5 rounded-lg border-2 border-[#1A1A1A] bg-[#E85D3F] text-white shadow-sm">
                               <IconComp className="w-5 h-5" />
                             </div>
-                            <span className="font-jakarta text-xs uppercase font-bold tracking-wider text-cyan-400">
-                              FEATURED SYSTEM
+                            <span className="font-jakarta text-xs uppercase font-extrabold tracking-wider text-[#E85D3F]">
+                              Featured Project
                             </span>
                           </div>
 
-                          <h3 className="font-jakarta font-extrabold text-2xl md:text-3xl text-white uppercase tracking-tight group-hover:text-cyan-300 transition-colors">
+                          <h3 className="font-jakarta font-black text-2xl md:text-3xl text-[#1A1A1A] uppercase tracking-tight group-hover:text-[#E85D3F] transition-colors">
                             {project.title}
                           </h3>
 
-                          <p className="text-slate-300 font-sans text-sm md:text-base leading-relaxed">
+                          <p className="text-[#666666] font-sans text-sm md:text-base leading-relaxed font-medium">
                             {project.description}
                           </p>
 
@@ -107,7 +106,7 @@ export default function Projects({ projectsData }) {
                             {project.tags.map((tag) => (
                               <span 
                                 key={tag} 
-                                className="font-mono text-[10px] font-semibold uppercase tracking-wider bg-white/5 px-3 py-1 rounded-full border border-white/10 text-slate-300"
+                                className="font-jakarta text-[9px] font-extrabold uppercase tracking-wider bg-[#FAFAF8] px-2.5 py-1 rounded border-2 border-[#1A1A1A] text-[#1A1A1A]"
                               >
                                 {tag}
                               </span>
@@ -116,16 +115,16 @@ export default function Projects({ projectsData }) {
 
                           {/* Links */}
                           {(project.github || project.demo) && (
-                            <div className="flex items-center space-x-6 pt-4 border-t border-white/10">
+                            <div className="flex items-center space-x-6 pt-4 border-t border-[#E0DFDB]">
                               {project.github && (
                                 <a 
                                   href={project.github} 
                                   target="_blank" 
                                   rel="noopener noreferrer" 
-                                  className="flex items-center space-x-2 font-jakarta font-bold text-xs uppercase text-slate-300 hover:text-cyan-400 transition-colors"
+                                  className="flex items-center space-x-1.5 font-jakarta font-extrabold text-xs uppercase text-[#1A1A1A] hover:text-[#E85D3F] transition-colors"
                                 >
                                   <Github className="w-4 h-4" />
-                                  <span>Repository</span>
+                                  <span>Source</span>
                                 </a>
                               )}
                               {project.demo && (
@@ -133,10 +132,10 @@ export default function Projects({ projectsData }) {
                                   href={project.demo} 
                                   target="_blank" 
                                   rel="noopener noreferrer" 
-                                  className="flex items-center space-x-2 font-jakarta font-bold text-xs uppercase text-slate-300 hover:text-cyan-400 transition-colors"
+                                  className="flex items-center space-x-1.5 font-jakarta font-extrabold text-xs uppercase text-[#1A1A1A] hover:text-[#E85D3F] transition-colors"
                                 >
                                   <ExternalLink className="w-4 h-4" />
-                                  <span>Live Demo</span>
+                                  <span>Demo</span>
                                 </a>
                               )}
                             </div>
@@ -145,7 +144,7 @@ export default function Projects({ projectsData }) {
 
                         {/* Right: Mockup Preview */}
                         <div className="md:col-span-5 flex justify-center pt-4 md:pt-0">
-                          <div className="w-full max-w-[220px] h-52 rounded-2xl border border-white/15 bg-slate-900 overflow-hidden relative shadow-lg group-hover:scale-105 transition-transform">
+                          <div className="w-full max-w-[200px] h-48 border-2 border-[#1A1A1A] rounded-xl bg-[#F0EFEB] overflow-hidden relative shadow-sm rotate-[1deg] group-hover:rotate-0 transition-transform">
                             <img 
                               src={neurocartImg} 
                               alt={`${project.title} Preview`}
@@ -163,28 +162,28 @@ export default function Projects({ projectsData }) {
             // Regular Cards
             return (
               <ScrollReveal key={`grid-${project.id}`} delay={index * 0.08} speed={1 + (index % 3) * 0.08}>
-                <div className="group glass glass-hover glass-spotlight relative flex flex-col justify-between h-full rounded-3xl border border-white/15 p-6 shadow-xl overflow-hidden">
+                <div className="group relative flex flex-col justify-between h-full rounded-2xl border-2 border-[#1A1A1A] bg-white p-6 offset-shadow-black hover:bg-[#F0EFEB] overflow-hidden">
                   {/* Status Badge */}
                   <span 
-                    className={`absolute top-6 right-6 font-mono font-bold text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                    className={`absolute top-6 right-6 font-jakarta font-extrabold text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border-2 ${
                       isCompleted 
-                        ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
-                        : 'bg-amber-500/10 border-amber-500/40 text-amber-400'
+                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600'
+                        : 'bg-amber-500/10 border-amber-500/60 text-amber-600'
                     }`}
                   >
                     {project.status}
                   </span>
 
                   <div className="space-y-4 text-left">
-                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-cyan-500/20 group-hover:border-cyan-400/40 group-hover:text-cyan-400 transition-all">
+                    <div className="p-2.5 rounded-lg border-2 border-[#1A1A1A] bg-[#FAFAF8] text-[#1A1A1A] w-max group-hover:bg-[#E85D3F] group-hover:text-white transition-colors duration-200">
                       <IconComp className="w-5 h-5" />
                     </div>
 
-                    <h3 className="font-jakarta font-extrabold text-xl text-white group-hover:text-cyan-300 transition-colors uppercase tracking-tight">
+                    <h3 className="font-jakarta font-black text-lg md:text-xl text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors uppercase tracking-wide">
                       {project.title}
                     </h3>
 
-                    <p className="text-slate-300 font-sans text-xs md:text-sm leading-relaxed">
+                    <p className="text-[#666666] font-sans text-xs md:text-sm leading-relaxed font-medium">
                       {project.description}
                     </p>
                   </div>
@@ -194,7 +193,7 @@ export default function Projects({ projectsData }) {
                       {project.tags.map((tag) => (
                         <span 
                           key={tag} 
-                          className="font-mono text-[9px] font-semibold uppercase tracking-wider bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10 text-slate-300"
+                          className="font-jakarta text-[8px] font-extrabold uppercase tracking-wider bg-[#FAFAF8] px-2 py-0.5 rounded border-2 border-[#1A1A1A] text-[#1A1A1A]"
                         >
                           {tag}
                         </span>
@@ -202,13 +201,13 @@ export default function Projects({ projectsData }) {
                     </div>
 
                     {(project.github || project.demo) && (
-                      <div className="flex items-center space-x-4 pt-3 border-t border-white/10">
+                      <div className="flex items-center space-x-4 pt-2 border-t border-[#E0DFDB]">
                         {project.github && (
                           <a 
                             href={project.github} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase text-slate-300 hover:text-cyan-400 transition-colors"
+                            className="flex items-center space-x-1.5 font-jakarta font-extrabold text-[10px] uppercase text-[#1A1A1A] hover:text-[#E85D3F] transition-colors"
                           >
                             <Github className="w-3.5 h-3.5" />
                             <span>Source</span>
@@ -219,7 +218,7 @@ export default function Projects({ projectsData }) {
                             href={project.demo} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase text-slate-300 hover:text-cyan-400 transition-colors"
+                            className="flex items-center space-x-1.5 font-jakarta font-extrabold text-[10px] uppercase text-[#1A1A1A] hover:text-[#E85D3F] transition-colors"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                             <span>Demo</span>

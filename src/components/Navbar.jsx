@@ -21,7 +21,6 @@ export default function Navbar({ heroData }) {
   const location = useLocation()
   const navigate = useNavigate()
 
-  // Track Active Section on Scroll
   useEffect(() => {
     const navItems = ['hero', 'about', 'achievements', 'skills', 'projects', 'experience', 'contact']
     
@@ -72,23 +71,23 @@ export default function Navbar({ heroData }) {
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-50 transition-all duration-300">
-      <div className="glass-strong rounded-full px-5 py-3 flex items-center justify-between border border-white/15 shadow-[0_10px_35px_-5px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+      <div className="bg-[#FAFAF8]/90 backdrop-blur-xl rounded-full px-5 py-3 flex items-center justify-between border-2 border-[#1A1A1A] offset-shadow-black">
         {/* Brand / Logo */}
         <Link 
           to="/" 
           onClick={() => handleNavClick('hero')} 
           className="flex items-center space-x-2.5 font-jakarta text-sm md:text-base font-extrabold tracking-tight group"
         >
-          <span className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 via-cyan-400 to-violet-500 flex items-center justify-center text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.6)] group-hover:scale-105 transition-transform">
-            <Sparkles className="w-4 h-4 fill-slate-950" />
+          <span className="w-8 h-8 rounded-full bg-[#E85D3F] border border-[#1A1A1A] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+            <Sparkles className="w-4 h-4 fill-white" />
           </span>
-          <span className="text-slate-100 group-hover:text-cyan-400 transition-colors uppercase tracking-wider font-extrabold">
-            Afsal
+          <span className="text-[#1A1A1A] group-hover:text-[#E85D3F] transition-colors uppercase tracking-wider font-extrabold">
+            Afsal Ahmed
           </span>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center space-x-1 font-jakarta font-semibold text-xs uppercase tracking-wider bg-white/5 p-1 rounded-full border border-white/10">
+        <div className="hidden md:flex items-center space-x-1 font-jakarta font-extrabold text-xs uppercase tracking-wider bg-[#F0EFEB] p-1 rounded-full border border-[#E0DFDB]">
           {navLinks.map((item) => {
             const isActive = activeSection === item.id
             return (
@@ -97,8 +96,8 @@ export default function Navbar({ heroData }) {
                 onClick={() => handleNavClick(item.id)}
                 className={`px-4 py-2 rounded-full transition-all duration-200 relative ${
                   isActive 
-                    ? 'text-slate-950 font-bold bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]' 
-                    : 'text-slate-300 hover:text-white hover:bg-white/10'
+                    ? 'text-white font-bold bg-[#E85D3F] shadow-[0_2px_8px_rgba(232,93,63,0.4)]' 
+                    : 'text-[#666666] hover:text-[#1A1A1A] hover:bg-white'
                 }`}
               >
                 {item.label}
@@ -113,7 +112,7 @@ export default function Navbar({ heroData }) {
             href={heroData.github} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
+            className="p-2 rounded-full text-[#1A1A1A] hover:text-[#E85D3F] hover:bg-[#F0EFEB] transition-all"
             title="GitHub"
           >
             <Github className="w-4 h-4" />
@@ -122,7 +121,7 @@ export default function Navbar({ heroData }) {
             href={heroData.linkedin} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
+            className="p-2 rounded-full text-[#1A1A1A] hover:text-[#E85D3F] hover:bg-[#F0EFEB] transition-all"
             title="LinkedIn"
           >
             <Linkedin className="w-4 h-4" />
@@ -131,7 +130,7 @@ export default function Navbar({ heroData }) {
             href={heroData.leetcode} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="p-2 rounded-full text-slate-300 hover:text-cyan-400 hover:bg-white/10 transition-all"
+            className="p-2 rounded-full text-[#1A1A1A] hover:text-[#E85D3F] hover:bg-[#F0EFEB] transition-all"
             title="LeetCode"
           >
             <LeetCodeIcon className="w-4 h-4" />
@@ -140,7 +139,7 @@ export default function Navbar({ heroData }) {
             href={heroData.resumeUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:brightness-110 active:scale-95 transition-all"
+            className="flex items-center space-x-1.5 font-jakarta font-extrabold text-xs uppercase px-4 py-2 rounded-full bg-[#1A1A1A] text-white border border-[#1A1A1A] hover:bg-[#E85D3F] hover:border-[#E85D3F] active:scale-95 transition-all shadow-sm"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>CV</span>
@@ -150,7 +149,7 @@ export default function Navbar({ heroData }) {
         {/* Mobile Hamburger Button */}
         <button 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-slate-200 hover:text-cyan-400 focus:outline-none"
+          className="md:hidden p-2 text-[#1A1A1A] hover:text-[#E85D3F] focus:outline-none"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -158,16 +157,16 @@ export default function Navbar({ heroData }) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-3 glass-strong rounded-3xl p-6 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
-          <div className="flex flex-col space-y-2 font-jakarta font-semibold text-sm uppercase tracking-wider">
+        <div className="md:hidden mt-3 bg-[#FAFAF8] rounded-3xl p-6 border-2 border-[#1A1A1A] offset-shadow-black flex flex-col space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="flex flex-col space-y-2 font-jakarta font-extrabold text-sm uppercase tracking-wider">
             {navLinks.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
                 className={`text-left px-4 py-2.5 rounded-xl transition-all ${
                   activeSection === item.id
-                    ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30'
-                    : 'text-slate-300 hover:bg-white/5'
+                    ? 'bg-[#E85D3F] text-white font-bold'
+                    : 'text-[#1A1A1A] hover:bg-[#F0EFEB]'
                 }`}
               >
                 {item.label}
@@ -175,15 +174,15 @@ export default function Navbar({ heroData }) {
             ))}
           </div>
 
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+          <div className="pt-4 border-t border-[#E0DFDB] flex items-center justify-between">
             <div className="flex space-x-3">
-              <a href={heroData.github} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+              <a href={heroData.github} target="_blank" rel="noopener noreferrer" className="p-2 text-[#1A1A1A] hover:text-[#E85D3F]">
                 <Github className="w-5 h-5" />
               </a>
-              <a href={heroData.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+              <a href={heroData.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 text-[#1A1A1A] hover:text-[#E85D3F]">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href={heroData.leetcode} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-300 hover:text-cyan-400">
+              <a href={heroData.leetcode} target="_blank" rel="noopener noreferrer" className="p-2 text-[#1A1A1A] hover:text-[#E85D3F]">
                 <LeetCodeIcon className="w-5 h-5" />
               </a>
             </div>
@@ -191,7 +190,7 @@ export default function Navbar({ heroData }) {
               href={heroData.resumeUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center space-x-1.5 font-jakarta font-bold text-xs uppercase px-4 py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg"
+              className="flex items-center space-x-1.5 font-jakarta font-extrabold text-xs uppercase px-4 py-2.5 rounded-full bg-[#E85D3F] text-white border border-[#1A1A1A]"
             >
               <FileText className="w-4 h-4" />
               <span>Resume</span>

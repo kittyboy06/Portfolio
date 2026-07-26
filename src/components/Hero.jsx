@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, Github, Linkedin, Mail, Code2, Sparkles, Terminal, Box } from 'lucide-react'
+import { ArrowRight, Download, Github, Linkedin, Mail, Code2, Sparkles, Terminal } from 'lucide-react'
 import { LeetCodeIcon } from './Navbar'
 import ThreeScene from './ThreeScene'
 
@@ -45,9 +45,9 @@ function Typewriter({ roles }) {
   }, [currentText, isDeleting, currentRoleIndex, roles, typingSpeed])
 
   return (
-    <span className="gradient-text-cyan font-jakarta inline-block font-extrabold tracking-wide select-none drop-shadow-[0_0_12px_rgba(6,182,212,0.4)]">
+    <span className="gradient-text-coral font-jakarta inline-block font-extrabold tracking-wide select-none">
       {currentText}
-      <span className="inline-block w-[3px] h-5 ml-1 bg-cyan-400 animate-pulse"></span>
+      <span className="inline-block w-[3px] h-5 ml-1 bg-[#E85D3F] animate-pulse"></span>
     </span>
   )
 }
@@ -82,7 +82,7 @@ export default function Hero({ heroData }) {
   return (
     <section 
       id="hero" 
-      className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden py-12 px-4 md:px-12"
+      className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden py-12 px-4 md:px-12"
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center w-full z-10">
         
@@ -93,26 +93,26 @@ export default function Hero({ heroData }) {
           animate="visible"
           className="lg:col-span-7 flex flex-col items-start text-left space-y-6"
         >
-          {/* Eyebrow Status Badge */}
+          {/* Eyebrow Badge */}
           <motion.div 
             variants={childVariants}
-            className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full glass border border-cyan-500/30 text-xs font-bold text-cyan-400 font-jakarta uppercase tracking-wider shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+            className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-white border-2 border-[#1A1A1A] text-xs font-extrabold text-[#1A1A1A] font-jakarta uppercase tracking-wider offset-shadow-black"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>AVAILABLE FOR BUILD & COLLAB</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#E85D3F] animate-ping"></span>
+            <Terminal className="w-3.5 h-3.5 text-[#E85D3F]" />
+            <span>PLAYER CLASS: DEVELOPER</span>
           </motion.div>
 
           {/* Headline */}
           <motion.div variants={childVariants} className="space-y-3">
-            <h1 className="font-jakarta text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.15]">
+            <h1 className="font-jakarta text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-[#1A1A1A] leading-[1.15] uppercase">
               Turning ideas into <br />
-              <span className="gradient-text-hero">high-impact products.</span>
+              <span className="underline decoration-[#E85D3F] decoration-4 md:decoration-8 underline-offset-8">real</span> products.
             </h1>
             
             {/* Roles cycling */}
-            <div className="flex items-center space-x-2.5 text-base md:text-xl text-slate-400 uppercase font-bold tracking-wider font-jakarta pt-1">
-              <Code2 className="w-5 h-5 text-indigo-400" />
+            <div className="flex items-center space-x-2.5 text-base md:text-xl text-[#666666] uppercase font-bold tracking-wider font-jakarta pt-1">
+              <Code2 className="w-5 h-5 text-[#4F46E5]" />
               <span>I build</span>
               <Typewriter roles={heroData.roles} />
             </div>
@@ -121,9 +121,9 @@ export default function Hero({ heroData }) {
           {/* Subheading / Bio */}
           <motion.p 
             variants={childVariants}
-            className="text-base md:text-lg text-slate-300 font-sans leading-relaxed max-w-xl"
+            className="text-base md:text-lg text-[#666666] font-sans leading-relaxed max-w-xl font-medium"
           >
-            {heroData.tagline || "3rd-year AIML Student at Jerusalem College of Engineering. Winner of Cipher Quest & PALS Think2Impact Jury Award. Architecting Android apps, full-stack web platforms, and AI systems."}
+            {heroData.tagline || "3rd-year AIML Student at Jerusalem College of Engineering. Winner of Cipher Quest & PALS Think2Impact Jury Award. Building Android apps, full-stack web products, and AI systems."}
           </motion.p>
 
           {/* Action Buttons */}
@@ -133,9 +133,9 @@ export default function Hero({ heroData }) {
           >
             <button
               onClick={handleScrollToProjects}
-              className="flex items-center justify-center space-x-2.5 w-full sm:w-auto font-jakarta font-bold text-sm uppercase px-8 py-4 rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 text-slate-950 shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(6,182,212,0.8)] hover:scale-[1.02] active:scale-95 transition-all"
+              className="flex items-center justify-center space-x-2.5 w-full sm:w-auto font-jakarta font-black text-xs md:text-sm uppercase px-8 py-4 rounded-xl bg-[#E85D3F] border-2 border-[#1A1A1A] text-white tracking-widest offset-shadow-black hover:bg-[#D94625] transition-all"
             >
-              <span>Explore My Work</span>
+              <span>See my work</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
@@ -143,9 +143,9 @@ export default function Hero({ heroData }) {
               href={heroData.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-2.5 w-full sm:w-auto font-jakarta font-bold text-sm uppercase px-8 py-4 rounded-full glass glass-hover text-slate-200 hover:text-white border border-white/20 transition-all"
+              className="flex items-center justify-center space-x-2.5 w-full sm:w-auto font-jakarta font-black text-xs md:text-sm uppercase px-8 py-4 rounded-xl bg-white border-2 border-[#1A1A1A] text-[#1A1A1A] tracking-widest offset-shadow-black hover:bg-[#F0EFEB] transition-all"
             >
-              <Download className="w-4 h-4 text-cyan-400" />
+              <Download className="w-4 h-4 text-[#E85D3F]" />
               <span>Download Resume</span>
             </a>
           </motion.div>
@@ -153,13 +153,13 @@ export default function Hero({ heroData }) {
           {/* Social Links Row */}
           <motion.div 
             variants={childVariants}
-            className="flex flex-wrap items-center gap-5 md:gap-8 pt-6 border-t border-white/10 w-full"
+            className="flex flex-wrap items-center gap-5 md:gap-8 pt-6 border-t-2 border-[#E0DFDB] w-full"
           >
             <a 
               href={heroData.github} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-sm font-jakarta font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+              className="flex items-center space-x-2 text-sm font-jakarta font-extrabold text-[#1A1A1A]/80 hover:text-[#E85D3F] transition-colors"
             >
               <Github className="w-4 h-4" />
               <span>GitHub</span>
@@ -168,7 +168,7 @@ export default function Hero({ heroData }) {
               href={heroData.linkedin} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-sm font-jakarta font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+              className="flex items-center space-x-2 text-sm font-jakarta font-extrabold text-[#1A1A1A]/80 hover:text-[#E85D3F] transition-colors"
             >
               <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
@@ -177,14 +177,14 @@ export default function Hero({ heroData }) {
               href={heroData.leetcode} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-sm font-jakarta font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+              className="flex items-center space-x-2 text-sm font-jakarta font-extrabold text-[#1A1A1A]/80 hover:text-[#E85D3F] transition-colors"
             >
               <LeetCodeIcon className="w-4 h-4" />
               <span>LeetCode</span>
             </a>
             <a 
               href={`mailto:${heroData.email}`} 
-              className="flex items-center space-x-2 text-sm font-jakarta font-semibold text-slate-400 hover:text-cyan-400 transition-colors"
+              className="flex items-center space-x-2 text-sm font-jakarta font-extrabold text-[#1A1A1A]/80 hover:text-[#E85D3F] transition-colors"
             >
               <Mail className="w-4 h-4" />
               <span>Email</span>
@@ -192,24 +192,24 @@ export default function Hero({ heroData }) {
           </motion.div>
         </motion.div>
 
-        {/* Right Side: Real WebGL 3D Three.js Animation (Anime.js Style) */}
+        {/* Right Side: Real WebGL 3D Three.js Animation in Light Glass Frame */}
         <div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center relative">
           <motion.div 
             initial={{ scale: 0.85, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', delay: 0.2, stiffness: 100 }}
-            className="w-full h-[440px] rounded-3xl glass border border-white/20 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col justify-between"
+            className="w-full h-[440px] rounded-2xl bg-white border-2 border-[#1A1A1A] p-2 offset-shadow-black relative overflow-hidden flex flex-col justify-between"
           >
             {/* Top Bar Label */}
             <div className="flex items-center justify-between px-4 pt-3 z-10">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                <span className="font-mono text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#E85D3F] animate-ping"></span>
+                <span className="font-mono text-xs font-extrabold text-[#1A1A1A] uppercase tracking-wider">
                   REAL 3D WEBGL ENGINE
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-slate-400 uppercase bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full">
-                THREE.JS CANVAS
+              <span className="font-mono text-[10px] text-[#666666] uppercase bg-[#F0EFEB] border border-[#E0DFDB] px-2.5 py-0.5 rounded-full font-bold">
+                THREE.JS
               </span>
             </div>
 
@@ -219,8 +219,8 @@ export default function Hero({ heroData }) {
             </div>
 
             {/* Bottom Floating Pill */}
-            <div className="px-4 pb-3 flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/10 pt-2 z-10">
-              <span className="flex items-center space-x-1.5 text-cyan-300">
+            <div className="px-4 pb-3 flex items-center justify-between text-[11px] font-mono text-[#666666] border-t border-[#E0DFDB] pt-2 z-10 font-bold">
+              <span className="flex items-center space-x-1.5 text-[#E85D3F]">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>MOVE MOUSE TO TILT 3D KNOT</span>
               </span>

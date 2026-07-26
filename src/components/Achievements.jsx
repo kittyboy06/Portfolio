@@ -1,5 +1,5 @@
 import React from 'react'
-import { Trophy, Award, Medal, Star } from 'lucide-react'
+import { Trophy, Award, Medal } from 'lucide-react'
 import ScrollReveal from './ScrollReveal'
 
 export default function Achievements({ achievementsData }) {
@@ -14,23 +14,31 @@ export default function Achievements({ achievementsData }) {
     return Award
   }
 
+  const accentColors = [
+    'bg-yellow-400/20 border-yellow-500 text-yellow-600',
+    'bg-[#E85D3F]/20 border-[#E85D3F] text-[#E85D3F]',
+    'bg-orange-400/20 border-orange-500 text-orange-600',
+    'bg-blue-400/20 border-blue-500 text-blue-600',
+    'bg-green-400/20 border-green-500 text-green-600',
+  ]
+
   return (
     <section
       id="achievements"
-      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden border-t-2 border-[#1A1A1A]"
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
 
         {/* Section Heading */}
         <ScrollReveal speed={0.8}>
           <div className="text-center mb-12 md:mb-16">
-            <span className="font-jakarta text-xs font-extrabold tracking-widest text-amber-400 uppercase px-4 py-1.5 rounded-full glass border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
-              AWARDS & RECOGNITION
+            <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+              Trophy Room
             </span>
-            <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
+            <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
               Achievements
             </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.8)]"></div>
+            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
           </div>
         </ScrollReveal>
 
@@ -38,30 +46,25 @@ export default function Achievements({ achievementsData }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           {achievementsData.map((item, index) => {
             const IconComp = getIcon(item.title)
+            const colorClass = accentColors[index % accentColors.length]
 
             return (
               <ScrollReveal key={index} delay={index * 0.08} speed={1 + (index % 3) * 0.08}>
-                <div className="group glass glass-hover glass-spotlight p-6 rounded-3xl border border-white/15 shadow-xl relative select-none flex flex-col justify-between h-full">
+                <div className="group relative bg-white p-5 md:p-6 rounded-xl border-2 border-[#1A1A1A] offset-shadow-black hover:bg-[#F0EFEB] transition-colors select-none h-full flex flex-col justify-between">
                   {/* Icon + Year Badge */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:bg-amber-500/20 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]">
-                      <IconComp className="w-6 h-6" />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center ${colorClass}`}>
+                      <IconComp className="w-5 h-5" />
                     </div>
-                    <span className="font-mono font-bold text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-300">
+                    <span className="font-jakarta font-black text-xs bg-[#F0EFEB] border-2 border-[#1A1A1A] px-2.5 py-1 rounded-full text-[#666666] tracking-wider">
                       {item.year}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <div>
-                    <h3 className="font-jakarta font-extrabold text-base md:text-lg text-white uppercase tracking-tight leading-snug group-hover:text-amber-300 transition-colors">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center space-x-1 mt-3 text-amber-400/70">
-                      <Star className="w-3.5 h-3.5 fill-amber-400/50" />
-                      <span className="text-[11px] font-mono uppercase text-slate-400">HONOR AWARD</span>
-                    </div>
-                  </div>
+                  <h3 className="font-jakarta font-black text-sm md:text-base uppercase text-[#1A1A1A] tracking-wide leading-snug group-hover:text-[#E85D3F] transition-colors">
+                    {item.title}
+                  </h3>
                 </div>
               </ScrollReveal>
             )

@@ -8,16 +8,14 @@ export default {
     extend: {
       colors: {
         theme: {
-          bg: "#0A0A12",        // Deep space dark (Anime.js inspired)
-          card: "rgba(18, 18, 30, 0.7)", // Frosted dark glass
-          surface: "rgba(255, 255, 255, 0.04)",
-          accent: "#06B6D4",    // Vibrant Cyan
-          secondary: "#8B5CF6", // Luminous Violet
-          indigo: "#6366F1",    // Luminous Indigo
-          rose: "#F43F5E",      // Neon Rose
-          text: "#F8FAFC",      // Slate 50 text
-          muted: "#94A3B8",     // Slate 400 muted text
-          border: "rgba(255, 255, 255, 0.12)" // Glass edge line
+          bg: "#FAFAF8",       // Soft Cream / Off-white (from backup)
+          card: "rgba(255, 255, 255, 0.9)", // Pure white light glass
+          surface: "#F0EFEB",  // Light gray surface
+          accent: "#E85D3F",   // Warm Coral
+          secondary: "#4F46E5",// Electric Indigo
+          text: "#1A1A1A",     // Near-black text
+          muted: "#666666",    // Muted dark gray
+          border: "#E0DFDB"    // Warm gray border
         }
       },
       fontFamily: {

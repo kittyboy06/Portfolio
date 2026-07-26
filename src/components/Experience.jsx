@@ -21,7 +21,7 @@ export default function Experience({ experienceData }) {
   return (
     <section 
       id="experience" 
-      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden"
+      className="relative py-16 md:py-24 px-4 md:px-12 overflow-hidden border-t-2 border-[#1A1A1A]"
     >
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
@@ -29,27 +29,27 @@ export default function Experience({ experienceData }) {
         <ScrollReveal speed={0.8}>
           <div className="w-full flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16">
             <div className="text-center md:text-left mb-6 md:mb-0">
-              <span className="font-jakarta text-xs font-extrabold tracking-widest gradient-text-cyan uppercase px-4 py-1.5 rounded-full glass border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                MILESTONES & TIMELINE
+              <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
+                Timeline Log
               </span>
-              <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
+              <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
                 Experience
               </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 to-indigo-500 mt-4 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)] md:mx-0 mx-auto"></div>
+              <div className="w-16 h-[4px] bg-[#E85D3F] mt-4 rounded-full md:mx-0 mx-auto"></div>
             </div>
 
             {/* Scroll Controls */}
             <div className="flex space-x-2">
               <button 
                 onClick={() => handleScroll('left')}
-                className="p-3 rounded-full glass glass-hover text-slate-300 hover:text-cyan-400 border border-white/15 transition-all"
+                className="p-3 rounded-full bg-white border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#E85D3F] hover:text-white transition-all offset-shadow-black"
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => handleScroll('right')}
-                className="p-3 rounded-full glass glass-hover text-slate-300 hover:text-cyan-400 border border-white/15 transition-all"
+                className="p-3 rounded-full bg-white border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#E85D3F] hover:text-white transition-all offset-shadow-black"
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -61,7 +61,7 @@ export default function Experience({ experienceData }) {
         {/* Timeline Container */}
         <div className="relative w-full py-4">
           
-          <div className="absolute left-0 right-0 top-[32px] h-[2px] bg-gradient-to-r from-cyan-500/50 via-indigo-500/50 to-violet-500/50 pointer-events-none z-0"></div>
+          <div className="absolute left-0 right-0 top-[32px] h-[3px] bg-[#1A1A1A] pointer-events-none z-0"></div>
 
           <div 
             ref={scrollContainerRef}
@@ -87,7 +87,7 @@ export default function Experience({ experienceData }) {
                 >
                   {/* Timeline Node */}
                   <div className="mb-6 flex items-center justify-center relative">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 text-slate-950 flex flex-col items-center justify-center font-jakarta font-extrabold text-xs shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                    <div className="w-12 h-12 rounded-xl bg-[#E85D3F] border-2 border-[#1A1A1A] text-white flex flex-col items-center justify-center font-jakarta font-extrabold text-xs offset-shadow-black">
                       <IconComp className="w-4 h-4 mb-0.5" />
                       <span>{yearDisplay}</span>
                     </div>
@@ -95,28 +95,28 @@ export default function Experience({ experienceData }) {
 
                   {/* Node Content Card */}
                   <ScrollReveal delay={index * 0.08} speed={1}>
-                    <div className="w-full glass glass-hover glass-spotlight p-6 rounded-3xl border border-white/15 shadow-xl flex flex-col justify-between h-64">
+                    <div className="w-full bg-white p-6 rounded-2xl border-2 border-[#1A1A1A] offset-shadow-black flex flex-col justify-between h-60">
                       <div>
                         {/* Date & Organization */}
-                        <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider text-cyan-400 mb-3 pb-2 border-b border-white/10">
+                        <div className="flex items-center justify-between text-xs font-jakarta font-extrabold uppercase text-[#E85D3F] mb-3 pb-2 border-b-2 border-[#E0DFDB]">
                           <span className="flex items-center space-x-1.5">
                             <Calendar className="w-3.5 h-3.5" />
                             <span>{item.date}</span>
                           </span>
-                          <span className="flex items-center space-x-1.5 text-slate-400">
+                          <span className="flex items-center space-x-1.5 text-[#666666]">
                             <Landmark className="w-3.5 h-3.5" />
                             <span>{item.org}</span>
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="font-jakarta font-extrabold text-base uppercase text-white tracking-tight leading-snug line-clamp-2">
+                        <h3 className="font-jakarta font-black text-sm uppercase text-[#1A1A1A] tracking-tight leading-snug line-clamp-2">
                           {item.title}
                         </h3>
                       </div>
 
                       {/* Description */}
-                      <p className="text-slate-300 font-sans text-xs leading-relaxed line-clamp-4">
+                      <p className="text-[#666666] font-sans text-xs leading-relaxed font-medium line-clamp-3">
                         {item.description}
                       </p>
                     </div>
