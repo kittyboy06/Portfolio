@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Download, Github, Linkedin, Mail, Code2, Sparkles, Terminal } from 'lucide-react'
+import { ArrowRight, Download, Github, Linkedin, Mail, Code2, Sparkles, Terminal, Box } from 'lucide-react'
 import { LeetCodeIcon } from './Navbar'
+import ThreeScene from './ThreeScene'
 
 // Typewriter Component for smooth role cycling
 function Typewriter({ roles }) {
@@ -23,7 +24,7 @@ function Typewriter({ roles }) {
 
         if (currentText === fullRole) {
           setIsDeleting(false)
-          setTypingSpeed(2200) // Pause for 2.2s at the end
+          setTypingSpeed(2200)
           setIsDeleting(true)
         }
       } else {
@@ -34,7 +35,7 @@ function Typewriter({ roles }) {
         if (currentText === '') {
           setIsDeleting(false)
           setCurrentRoleIndex((prev) => (prev + 1) % roles.length)
-          setTypingSpeed(400) // Pause before next typing
+          setTypingSpeed(400)
         }
       }
     }
@@ -81,7 +82,7 @@ export default function Hero({ heroData }) {
   return (
     <section 
       id="hero" 
-      className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden py-12 px-4 md:px-12"
+      className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden py-12 px-4 md:px-12"
     >
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center w-full z-10">
         
@@ -191,61 +192,39 @@ export default function Hero({ heroData }) {
           </motion.div>
         </motion.div>
 
-        {/* Right Side: Anime.js Interactive Glass Architecture Card */}
-        <div className="lg:col-span-5 hidden lg:flex items-center justify-center relative">
+        {/* Right Side: Real WebGL 3D Three.js Animation (Anime.js Style) */}
+        <div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center relative">
           <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
+            initial={{ scale: 0.85, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', delay: 0.3, stiffness: 100 }}
-            className="w-full max-w-[380px] p-6 rounded-3xl glass border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden group"
+            transition={{ type: 'spring', delay: 0.2, stiffness: 100 }}
+            className="w-full h-[440px] rounded-3xl glass border border-white/20 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col justify-between"
           >
-            {/* Top Bar */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
-              <div className="flex space-x-2">
-                <span className="w-3 h-3 rounded-full bg-rose-500/80"></span>
-                <span className="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+            {/* Top Bar Label */}
+            <div className="flex items-center justify-between px-4 pt-3 z-10">
+              <div className="flex items-center space-x-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span className="font-mono text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                  REAL 3D WEBGL ENGINE
+                </span>
               </div>
-              <span className="font-mono text-xs text-slate-400 flex items-center space-x-1">
-                <Sparkles className="w-3 h-3 text-cyan-400" />
-                <span>AFSAL_CORE_V2</span>
+              <span className="font-mono text-[10px] text-slate-400 uppercase bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full">
+                THREE.JS CANVAS
               </span>
             </div>
 
-            {/* Main Interactive Nodes */}
-            <div className="grid grid-cols-2 gap-4 my-2">
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/50 transition-colors">
-                <span className="text-xs font-mono text-cyan-400 block mb-1">01 // MOBILE</span>
-                <span className="font-jakarta font-bold text-white text-base">Android Dev</span>
-                <span className="text-xs text-slate-400 block mt-1">Kotlin · Compose</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-violet-400/50 transition-colors">
-                <span className="text-xs font-mono text-violet-400 block mb-1">02 // WEB</span>
-                <span className="font-jakarta font-bold text-white text-base">Full Stack</span>
-                <span className="text-xs text-slate-400 block mt-1">React · Vite · Node</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-indigo-400/50 transition-colors">
-                <span className="text-xs font-mono text-indigo-400 block mb-1">03 // AI</span>
-                <span className="font-jakarta font-bold text-white text-base">AI Integrations</span>
-                <span className="text-xs text-slate-400 block mt-1">Gemini · Ollama</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-rose-400/50 transition-colors">
-                <span className="text-xs font-mono text-rose-400 block mb-1">04 // GAME</span>
-                <span className="font-jakarta font-bold text-white text-base">Unity 6</span>
-                <span className="text-xs text-slate-400 block mt-1">C# · URP · Shader</span>
-              </div>
+            {/* Interactive 3D WebGL Canvas Scene */}
+            <div className="w-full h-[360px] relative">
+              <ThreeScene className="w-full h-full" />
             </div>
 
-            {/* Bottom Terminal Output */}
-            <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
-              <span className="text-emerald-400 flex items-center space-x-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>STATUS: READY</span>
+            {/* Bottom Floating Pill */}
+            <div className="px-4 pb-3 flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/10 pt-2 z-10">
+              <span className="flex items-center space-x-1.5 text-cyan-300">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>MOVE MOUSE TO TILT 3D KNOT</span>
               </span>
-              <span>CHENNAI, IN</span>
+              <span>60 FPS</span>
             </div>
           </motion.div>
         </div>
