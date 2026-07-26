@@ -5,8 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
  * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls.
- * Scaled and positioned so the entire model (ears, head, body, feet) fits 
- * 100% inside the card box with generous margins.
+ * Enables user zoom (mouse wheel / pinch) and drag rotation.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -21,7 +20,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-    camera.position.set(0, 0, 5.2) // Camera set further back so full model fits inside box
+    camera.position.set(0, 0, 5.2)
 
     // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({ 
@@ -33,11 +32,13 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
-    // 3. User Interactive OrbitControls (Clamped to Front Face)
+    // 3. User Interactive OrbitControls with ZOOM Enabled
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
     controls.dampingFactor = 0.08
-    controls.enableZoom = false  // Keep scale fixed inside card
+    controls.enableZoom = true   // ENABLED ZOOM FOR USER!
+    controls.minDistance = 2.5   // Allow close zoom-in
+    controls.maxDistance = 7.5   // Limit maximum zoom-out
     controls.enablePan = false   // Keep position centered inside card
     controls.target.set(0, -0.05, 0)
     
@@ -70,7 +71,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
         loadedModel.position.sub(center)
 
-        // Perfect scale factor so entire model fits comfortably inside card box
         const maxDim = Math.max(size.x, size.y, size.z)
         const targetScale = 1.9 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
@@ -135,7 +135,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     coralPointLight.position.set(2, 2, 3)
     scene.add(coralPointLight)
 
-    // 7. Animation Render Loop (Gentle breathing movement centered vertically)
+    // 7. Animation Render Loop
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -145,7 +145,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
       controls.update()
 
-      // Gentle vertical float wave centered perfectly
       if (modelGroup) {
         modelGroup.position.y = -0.05 + Math.sin(elapsedTime * 1.5) * 0.03
       }

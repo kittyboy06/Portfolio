@@ -222,7 +222,7 @@ export default function Hero({ heroData }) {
             <div className="px-4 pb-3 flex items-center justify-between text-[11px] font-mono text-[#666666] border-t border-[#E0DFDB] pt-2 z-10 font-bold">
               <span className="flex items-center space-x-1.5 text-[#E85D3F]">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>MOVE MOUSE TO TILT 3D KNOT</span>
+                <span>SCROLL TO ZOOM • DRAG TO ROTATE</span>
               </span>
               <span>60 FPS</span>
             </div>
