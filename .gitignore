@@ -64,6 +64,7 @@ web_modules/
 # Output directory for Vite
 dist/
 dist-ssr/
+_backup_v1/
 *.local
 
 # Editor directories and files
