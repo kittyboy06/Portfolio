@@ -9,10 +9,9 @@ import {
   Cpu, 
   Music,
   Brain,
-  Layers,
   Smartphone,
-  Sparkles,
-  Code
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import ScrollReveal from './ScrollReveal'
 
@@ -27,14 +26,40 @@ const getProjectIcon = (id, category) => {
 
 export default function Projects({ projectsData }) {
   const [activeCategory, setActiveCategory] = useState('All')
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 6
 
   if (!projectsData || projectsData.length === 0) return null
 
   const categories = ['All', 'AI Systems', 'Web & PWA', 'Unity Games', 'Mobile App']
 
+  // Filter projects by active category
   const filteredProjects = activeCategory === 'All'
     ? projectsData
     : projectsData.filter(p => p.category === activeCategory)
+
+  // Calculate Pagination
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE) || 1
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
+  // Reset page when category changes
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat)
+    setCurrentPage(1)
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1)
+    }
+  }
 
   const base = import.meta.env.BASE_URL || '/'
   const neurocartImg = `${base}neurocart_mockup.png`
@@ -48,42 +73,82 @@ export default function Projects({ projectsData }) {
         
         {/* Section Heading */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-8 md:mb-12">
+          <div className="text-center mb-6 md:mb-8">
             <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
-              Complete Portfolio Showcase
+              Selected Projects Showcase
             </span>
             <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Featured Quests & Projects ({projectsData.length})
+              Featured Quests ({filteredProjects.length})
             </h2>
-            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
+            <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-3 rounded-full"></div>
           </div>
         </ScrollReveal>
 
-        {/* Category Filter Pills */}
+        {/* Category Filter Pills & Page Navigation Header */}
         <ScrollReveal delay={0.1}>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`font-jakarta text-xs font-extrabold uppercase tracking-wider px-4 py-2 rounded-full border-2 transition-all cursor-pointer ${
-                  activeCategory === cat
-                    ? 'bg-[#E85D3F] border-[#1A1A1A] text-white offset-shadow-black scale-105'
-                    : 'bg-white border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#F0EFEB]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-4 mb-8 border-b-2 border-[#E0DFDB] pb-6">
+            
+            {/* Category Pills */}
+            <div className="flex flex-wrap justify-center md:justify-start gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`font-jakarta text-xs font-extrabold uppercase tracking-wider px-3.5 py-1.5 rounded-full border-2 transition-all cursor-pointer ${
+                    activeCategory === cat
+                      ? 'bg-[#E85D3F] border-[#1A1A1A] text-white offset-shadow-black scale-105'
+                      : 'bg-white border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#F0EFEB]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Pagination Controls (Header) */}
+            {totalPages > 1 && (
+              <div className="flex items-center space-x-3 bg-white border-2 border-[#1A1A1A] rounded-xl px-4 py-1.5 offset-shadow-black">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                  className={`p-1 rounded-lg border border-[#1A1A1A] transition-all ${
+                    currentPage === 1 
+                      ? 'opacity-30 cursor-not-allowed bg-[#F0EFEB]' 
+                      : 'bg-white hover:bg-[#E85D3F] hover:text-white cursor-pointer active:scale-95'
+                  }`}
+                  aria-label="Previous Page"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                <span className="font-mono text-xs font-extrabold text-[#1A1A1A] uppercase tracking-wider">
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className={`p-1 rounded-lg border border-[#1A1A1A] transition-all ${
+                    currentPage === totalPages 
+                      ? 'opacity-30 cursor-not-allowed bg-[#F0EFEB]' 
+                      : 'bg-white hover:bg-[#E85D3F] hover:text-white cursor-pointer active:scale-95'
+                  }`}
+                  aria-label="Next Page"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
           </div>
         </ScrollReveal>
 
-        {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {filteredProjects.map((project, index) => {
+        {/* Compact Grid Layout (Max 6 Items per Page) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full min-h-[420px]">
+          {paginatedProjects.map((project, index) => {
             const IconComp = getProjectIcon(project.id, project.category)
             const isCompleted = project.status.toLowerCase() === 'completed'
-            const isFeatured = project.id === 'neurocart' && activeCategory === 'All'
+            const isFeatured = project.id === 'neurocart' && activeCategory === 'All' && currentPage === 1
 
             if (isFeatured) {
               return (
@@ -262,6 +327,55 @@ export default function Projects({ projectsData }) {
             )
           })}
         </div>
+
+        {/* Bottom Pagination Controls */}
+        {totalPages > 1 && (
+          <ScrollReveal delay={0.2}>
+            <div className="flex items-center justify-center space-x-4 mt-10">
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className={`flex items-center space-x-2 font-jakarta font-extrabold text-xs uppercase px-5 py-2.5 rounded-xl border-2 border-[#1A1A1A] offset-shadow-black transition-all ${
+                  currentPage === 1 
+                    ? 'opacity-30 cursor-not-allowed bg-[#F0EFEB]' 
+                    : 'bg-white hover:bg-[#E85D3F] hover:text-white cursor-pointer active:scale-95'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Prev Page</span>
+              </button>
+
+              {/* Page Number Dots */}
+              <div className="flex items-center space-x-2 px-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => setCurrentPage(num)}
+                    className={`w-3 h-3 rounded-full transition-all border border-[#1A1A1A] cursor-pointer ${
+                      currentPage === num 
+                        ? 'bg-[#E85D3F] scale-125' 
+                        : 'bg-white hover:bg-[#E85D3F]/40'
+                    }`}
+                    aria-label={`Go to page ${num}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`flex items-center space-x-2 font-jakarta font-extrabold text-xs uppercase px-5 py-2.5 rounded-xl border-2 border-[#1A1A1A] offset-shadow-black transition-all ${
+                  currentPage === totalPages 
+                    ? 'opacity-30 cursor-not-allowed bg-[#F0EFEB]' 
+                    : 'bg-white hover:bg-[#E85D3F] hover:text-white cursor-pointer active:scale-95'
+                }`}
+              >
+                <span>Next Page</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </ScrollReveal>
+        )}
 
       </div>
     </section>
