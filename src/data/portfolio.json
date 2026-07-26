@@ -292,7 +292,7 @@
       "status": "Completed",
       "category": "Unity Games",
       "github": "https://github.com/kittyboy06/kitchen-chaos",
-      "demo": ""
+      "demo": "https://play.unity.com/en/games/99f1682b-93d8-439b-aeda-716ccdc260e2/kitchen-chaos"
     },
     {
       "id": "tic-tac-toe-webgl",
@@ -309,7 +309,7 @@
       "status": "Completed",
       "category": "Unity Games",
       "github": "https://github.com/kittyboy06/tic-tac-toe-unity",
-      "demo": ""
+      "demo": "https://play.unity.com/en/games/f9ae0011-60fc-4012-9869-b5c27aa5fe11/tic-tac-toe-by-kittyboy06"
     },
     {
       "id": "valen",
@@ -342,7 +342,7 @@
       "status": "Completed",
       "category": "Unity Games",
       "github": "https://github.com/kittyboy06/2d-open-world",
-      "demo": ""
+      "demo": "https://play.unity.com/en/games/54d74773-1a39-4a95-830e-63e7f9d9fb60/2d-top-down-open-world"
     },
     {
       "id": "unity-2d-platformer",
