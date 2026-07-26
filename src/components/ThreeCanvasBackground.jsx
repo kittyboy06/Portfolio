@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with mouse.glb Model
- * Scaled cleanly so it enhances ambient background space without overflowing.
+ * Keeps 3D model scale subtle and steady during scrolling (max 1.1x).
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -55,9 +55,9 @@ export default function ThreeCanvasBackground() {
         // Center geometry to origin
         loadedModel.position.sub(center)
 
-        // Well-proportioned scale factor (~2.2 units)
+        // Well-proportioned scale factor (~2.0 units)
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 2.2 / (maxDim || 1)
+        const targetScale = 2.0 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         // Enable shadows & metallic reflections
@@ -146,7 +146,7 @@ export default function ThreeCanvasBackground() {
       return Math.max(0, Math.min(1, window.scrollY / totalScroll))
     }
 
-    // 7. Render Loop
+    // 7. Render Loop (Subtle scroll scaling - max 1.1x)
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -171,26 +171,26 @@ export default function ThreeCanvasBackground() {
         const t = smoothScrollP / 0.25
         targetX = lerp(2.0, -2.2, t)
         targetY = lerp(0.1, -0.1, t)
-        targetZ = lerp(0, 0.4, t)
-        targetScale = lerp(1, 1.15, t)
+        targetZ = lerp(0, 0.2, t)
+        targetScale = lerp(1, 1.04, t)
       } else if (smoothScrollP < 0.5) {
         const t = (smoothScrollP - 0.25) / 0.25
         targetX = lerp(-2.2, 2.0, t)
-        targetY = lerp(-0.1, 0.3, t)
-        targetZ = lerp(0.4, 0.8, t)
-        targetScale = lerp(1.15, 1.25, t)
+        targetY = lerp(-0.1, 0.2, t)
+        targetZ = lerp(0.2, 0.4, t)
+        targetScale = lerp(1.04, 1.07, t)
       } else if (smoothScrollP < 0.75) {
         const t = (smoothScrollP - 0.5) / 0.25
         targetX = lerp(2.0, 0, t)
-        targetY = lerp(0.3, 0, t)
-        targetZ = lerp(0.8, 1.5, t)
-        targetScale = lerp(1.25, 1.4, t)
+        targetY = lerp(0.2, 0, t)
+        targetZ = lerp(0.4, 0.6, t)
+        targetScale = lerp(1.07, 1.09, t)
       } else {
         const t = (smoothScrollP - 0.75) / 0.25
         targetX = lerp(0, 0, t)
-        targetY = lerp(0, -0.2, t)
-        targetZ = lerp(1.5, 2.5, t)
-        targetScale = lerp(1.4, 1.7, t)
+        targetY = lerp(0, -0.1, t)
+        targetZ = lerp(0.6, 0.8, t)
+        targetScale = lerp(1.09, 1.1, t)
       }
 
       modelGroup.position.x = lerp(modelGroup.position.x, targetX + mouseX * 0.4, 0.08)
