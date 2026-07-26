@@ -14,7 +14,7 @@
     "resumeUrl": "resume.pdf"
   },
   "about": {
-    "bio": "2nd-year AIML student at Jerusalem College of Engineering, Chennai. Winner of Cipher Quest (1st Place) and PALS Think2Impact Jury Award. Participated in AMD Slingshot Campus Days, Cyber Connect Hackathon, and multiple AI innovation programs. Building Android apps, full-stack web products, AI systems, and Unity games.",
+    "bio": "3rd-year AIML student at Jerusalem College of Engineering, Chennai. Winner of Cipher Quest (1st Place) and PALS Think2Impact Jury Award. Participated in AMD Slingshot Campus Days, Cyber Connect Hackathon, and multiple AI innovation programs. Building Android apps, full-stack web products, AI systems, and Unity games.",
     "stats": [
       {
         "label": "Projects Shipped",
@@ -33,7 +33,7 @@
       },
       {
         "label": "Year",
-        "value": "2nd CSE",
+        "value": "3rd CSE",
         "icon": "graduation-cap"
       }
     ],
