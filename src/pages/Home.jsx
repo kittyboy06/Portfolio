@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Lenis from 'lenis'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import portfolioData from '../data/portfolio.json'
@@ -16,21 +16,15 @@ import ThreeCanvasBackground from '../components/ThreeCanvasBackground'
 
 export default function Home() {
   const data = portfolioData
-  const [scrollVelocity, setScrollVelocity] = useState(0)
 
-  // Setup Lenis Smooth Scroll Engine with Velocity Tracking
+  // Setup High-Performance Lenis Smooth Scroll Engine
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.6,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: 2.0,
-    })
-
-    lenis.on('scroll', (e) => {
-      const velocity = Math.max(-15, Math.min(15, e.velocity || 0))
-      setScrollVelocity(velocity)
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
     })
 
     function raf(time) {
@@ -48,22 +42,16 @@ export default function Home() {
   // Top Progress Bar
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 28,
+    stiffness: 150,
+    damping: 30,
     restDelta: 0.001
   })
 
   return (
-    <div 
-      className="min-h-screen w-full bg-[#FAFAF8] text-[#1A1A1A] relative overflow-x-hidden selection:bg-[#E85D3F] selection:text-white"
-      style={{
-        transform: `skewY(${scrollVelocity * 0.04}deg)`,
-        transition: 'transform 0.15s ease-out'
-      }}
-    >
+    <div className="min-h-screen w-full bg-[#FAFAF8] text-[#1A1A1A] relative overflow-x-hidden selection:bg-[#E85D3F] selection:text-white">
       {/* Top Scroll Progress Indicator */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#E85D3F] via-[#F43F5E] to-[#4F46E5] origin-left z-[100] shadow-[0_2px_10px_rgba(232,93,63,0.5)]"
+        className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#E85D3F] via-[#F43F5E] to-[#4F46E5] origin-left z-[100] shadow-[0_2px_10px_rgba(232,93,63,0.5)] pointer-events-none"
         style={{ scaleX }}
       />
 
