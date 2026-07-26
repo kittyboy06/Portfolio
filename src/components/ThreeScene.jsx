@@ -5,7 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
  * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls.
- * Shifted vertically downwards for perfect vertical centering inside the card box.
+ * Scaled and positioned so the entire model (ears, head, body, feet) fits 
+ * 100% inside the card box with generous margins.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -20,7 +21,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-    camera.position.set(0, -0.25, 4.2) // Shifted camera target downwards for centering
+    camera.position.set(0, 0, 5.2) // Camera set further back so full model fits inside box
 
     // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({ 
@@ -38,7 +39,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     controls.dampingFactor = 0.08
     controls.enableZoom = false  // Keep scale fixed inside card
     controls.enablePan = false   // Keep position centered inside card
-    controls.target.set(0, -0.25, 0) // Align orbit center with lowered camera
+    controls.target.set(0, -0.05, 0)
     
     // Clamp rotation angles so the back of the model is NEVER shown
     controls.minAzimuthAngle = -Math.PI / 3.5  // -50 deg left
@@ -69,8 +70,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
         loadedModel.position.sub(center)
 
+        // Perfect scale factor so entire model fits comfortably inside card box
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 2.7 / (maxDim || 1)
+        const targetScale = 1.9 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         loadedModel.traverse((child) => {
@@ -143,9 +145,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
       controls.update()
 
-      // Gentle vertical float wave centered lower
+      // Gentle vertical float wave centered perfectly
       if (modelGroup) {
-        modelGroup.position.y = -0.3 + Math.sin(elapsedTime * 1.5) * 0.03
+        modelGroup.position.y = -0.05 + Math.sin(elapsedTime * 1.5) * 0.03
       }
 
       particleSystem.rotation.y = -elapsedTime * 0.05
