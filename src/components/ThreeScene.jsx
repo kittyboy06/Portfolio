@@ -1,14 +1,17 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { Loader2, Sparkles } from 'lucide-react'
 
 /**
- * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls.
- * Enables user zoom (mouse wheel / pinch) and drag rotation.
+ * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls & Loading Status.
+ * Displays real-time download percentage & sleek progress bar until mouse.glb is loaded.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     const container = mountRef.current
@@ -36,23 +39,23 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
     controls.dampingFactor = 0.08
-    controls.enableZoom = true   // ENABLED ZOOM FOR USER!
-    controls.minDistance = 2.5   // Allow close zoom-in
-    controls.maxDistance = 7.5   // Limit maximum zoom-out
-    controls.enablePan = false   // Keep position centered inside card
+    controls.enableZoom = true
+    controls.minDistance = 2.5
+    controls.maxDistance = 7.5
+    controls.enablePan = false
     controls.target.set(0, -0.05, 0)
     
     // Clamp rotation angles so the back of the model is NEVER shown
-    controls.minAzimuthAngle = -Math.PI / 3.5  // -50 deg left
-    controls.maxAzimuthAngle = Math.PI / 3.5   // +50 deg right
-    controls.minPolarAngle = Math.PI / 3.2     // Tilt up limit
-    controls.maxPolarAngle = Math.PI / 1.8     // Tilt down limit
+    controls.minAzimuthAngle = -Math.PI / 3.5
+    controls.maxAzimuthAngle = Math.PI / 3.5
+    controls.minPolarAngle = Math.PI / 3.2
+    controls.maxPolarAngle = Math.PI / 1.8
 
     // Main 3D Model Group
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    // 4. Load Custom mouse.glb 3D Model
+    // 4. Load Custom mouse.glb 3D Model with Real-Time Progress Tracking
     const base = import.meta.env.BASE_URL || '/'
     const modelUrl = `${base}mouse.glb`
 
@@ -83,10 +86,21 @@ export default function ThreeScene({ className = "w-full h-full" }) {
         })
 
         modelGroup.add(loadedModel)
+        setLoadingProgress(100)
+        setTimeout(() => setIsLoaded(true), 200)
       },
-      undefined,
+      (xhr) => {
+        if (xhr.lengthComputable && xhr.total > 0) {
+          const percent = Math.round((xhr.loaded / xhr.total) * 100)
+          setLoadingProgress(percent)
+        } else {
+          // Estimate progress if total size unavailable
+          setLoadingProgress((prev) => Math.min(prev + 15, 90))
+        }
+      },
       (error) => {
         console.warn('Failed to load mouse.glb:', error)
+        setIsLoaded(true) // Graceful fallback
       }
     )
 
@@ -182,9 +196,39 @@ export default function ThreeScene({ className = "w-full h-full" }) {
   }, [])
 
   return (
-    <div 
-      ref={mountRef} 
-      className={`relative cursor-grab active:cursor-grabbing select-none pointer-events-auto ${className}`} 
-    />
+    <div className={`relative ${className}`}>
+      {/* Loading Status Indicator (Overlay inside Card Showcase) */}
+      {!isLoaded && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#FAFAF8]/95 backdrop-blur-md rounded-2xl p-6 transition-opacity duration-300">
+          <div className="flex items-center space-x-2 text-[#E85D3F] mb-3">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <Sparkles className="w-5 h-5 text-[#4F46E5] animate-pulse" />
+          </div>
+
+          <span className="font-jakarta font-black text-xs uppercase tracking-widest text-[#1A1A1A] mb-1">
+            Loading 3D Model
+          </span>
+          <span className="font-mono text-sm font-extrabold text-[#E85D3F] mb-4">
+            {loadingProgress}%
+          </span>
+
+          {/* Progress Bar Track */}
+          <div className="w-44 h-2 bg-[#E0DFDB] rounded-full overflow-hidden border border-[#1A1A1A]/20 shadow-inner">
+            <div 
+              className="h-full bg-gradient-to-r from-[#E85D3F] via-[#F43F5E] to-[#4F46E5] transition-all duration-200 rounded-full"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* WebGL Canvas Container */}
+      <div 
+        ref={mountRef} 
+        className={`w-full h-full cursor-grab active:cursor-grabbing select-none pointer-events-auto transition-opacity duration-500 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`} 
+      />
+    </div>
   )
 }
