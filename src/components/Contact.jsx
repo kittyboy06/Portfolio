@@ -1,7 +1,7 @@
 import React from 'react'
-import { motion } from 'framer-motion'
-import { Mail, Github, Linkedin, ArrowUpRight, Send } from 'lucide-react'
+import { Mail, Github, Linkedin, ArrowUpRight } from 'lucide-react'
 import { LeetCodeIcon } from './Navbar'
+import ScrollReveal from './ScrollReveal'
 
 export default function Contact({ contactData }) {
   if (!contactData) return null
@@ -41,25 +41,6 @@ export default function Contact({ contactData }) {
     }
   ]
 
-  const gridVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: 'spring', damping: 18, stiffness: 120 }
-    }
-  }
-
   return (
     <section 
       id="contact" 
@@ -68,40 +49,32 @@ export default function Contact({ contactData }) {
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         
         {/* Section Heading */}
-        <div className="text-center mb-12 md:mb-16">
-          <span className="font-jakarta text-xs font-extrabold tracking-widest gradient-text-cyan uppercase px-4 py-1.5 rounded-full glass border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-            GET IN TOUCH
-          </span>
-          <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
-            Let's Build Together
-          </h2>
-          <p className="font-mono text-xs md:text-sm text-slate-400 tracking-wider uppercase mt-2">
-            Open for software roles, app projects & AI collaborations
-          </p>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)]"></div>
-        </div>
+        <ScrollReveal speed={0.8}>
+          <div className="text-center mb-12 md:mb-16">
+            <span className="font-jakarta text-xs font-extrabold tracking-widest gradient-text-cyan uppercase px-4 py-1.5 rounded-full glass border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+              GET IN TOUCH
+            </span>
+            <h2 className="font-jakarta text-3xl md:text-5xl font-extrabold text-white mt-3 uppercase tracking-tight">
+              Let's Build Together
+            </h2>
+            <p className="font-mono text-xs md:text-sm text-slate-400 tracking-wider uppercase mt-2">
+              Open for software roles, app projects & AI collaborations
+            </p>
+            <div className="w-20 h-1 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 mx-auto mt-4 rounded-full shadow-[0_0_12px_rgba(6,182,212,0.8)]"></div>
+          </div>
+        </ScrollReveal>
 
         {/* 4 Clickable Grid Cards */}
-        <motion.div 
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full">
           {cards.map((card, index) => {
             const IconComp = card.icon
             return (
-              <motion.div 
-                key={index}
-                variants={cardVariants}
-                className="h-full"
-              >
+              <ScrollReveal key={index} delay={index * 0.08} speed={1 + index * 0.05}>
                 <a 
                   href={card.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group glass glass-hover relative flex flex-col justify-between h-full rounded-3xl border border-white/15 p-6 shadow-xl transition-all cursor-pointer ${card.accentGlow}`}
+                  className={`group glass glass-hover glass-spotlight relative flex flex-col justify-between h-full rounded-3xl border border-white/15 p-6 shadow-xl transition-all cursor-pointer ${card.accentGlow}`}
                 >
                   <div className="space-y-4">
                     {/* Icon + Badge */}
@@ -132,10 +105,10 @@ export default function Contact({ contactData }) {
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                 </a>
-              </motion.div>
+              </ScrollReveal>
             )
           })}
-        </motion.div>
+        </div>
 
       </div>
     </section>
