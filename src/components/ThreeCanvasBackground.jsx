@@ -3,8 +3,8 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
- * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with Custom Imported 3D Model (HORNET.glb)
- * Loads HORNET.glb, centers and scales it dynamically, and binds mouse tilt + scroll camera scrubbing!
+ * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with Custom HORNET.glb Model
+ * Enlarged 3D model scale with wireframe rings removed.
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -55,9 +55,9 @@ export default function ThreeCanvasBackground() {
         // Center geometry to origin
         loadedModel.position.sub(center)
 
-        // Normalize scale to ~2.2 units
+        // ENLARGED scale factor (~4.5 units instead of 2.2)
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 2.2 / (maxDim || 1)
+        const targetScale = 4.5 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         // Enable shadows & metallic reflections
@@ -72,24 +72,9 @@ export default function ThreeCanvasBackground() {
       },
       undefined,
       (error) => {
-        console.warn('Failed to load HORNET.glb, fallback geometry active:', error)
+        console.warn('Failed to load HORNET.glb:', error)
       }
     )
-
-    // Outer Orbiting Wireframe Rings for Aesthetic Accent
-    const ringGeometry = new THREE.TorusGeometry(2.4, 0.02, 16, 100)
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0xE85D3F,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.35
-    })
-    const ringMesh1 = new THREE.Mesh(ringGeometry, ringMaterial)
-    const ringMesh2 = new THREE.Mesh(ringGeometry, ringMaterial)
-    ringMesh2.rotation.x = Math.PI / 2
-
-    modelGroup.add(ringMesh1)
-    modelGroup.add(ringMesh2)
 
     // 4. 3D Orbiting Particle Constellation
     const particleCount = 450
@@ -128,7 +113,7 @@ export default function ThreeCanvasBackground() {
     scene.add(particleSystem)
 
     // 5. Lighting Setup for Light Theme
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
     scene.add(ambientLight)
 
     const coralPointLight = new THREE.PointLight(0xE85D3F, 4, 12)
@@ -184,28 +169,28 @@ export default function ThreeCanvasBackground() {
 
       if (smoothScrollP < 0.25) {
         const t = smoothScrollP / 0.25
-        targetX = lerp(2.2, -2.4, t)
-        targetY = lerp(0.2, -0.2, t)
+        targetX = lerp(2.0, -2.2, t)
+        targetY = lerp(0.1, -0.1, t)
         targetZ = lerp(0, 0.4, t)
         targetScale = lerp(1, 1.15, t)
       } else if (smoothScrollP < 0.5) {
         const t = (smoothScrollP - 0.25) / 0.25
-        targetX = lerp(-2.4, 2.2, t)
-        targetY = lerp(-0.2, 0.4, t)
+        targetX = lerp(-2.2, 2.0, t)
+        targetY = lerp(-0.1, 0.3, t)
         targetZ = lerp(0.4, 0.8, t)
         targetScale = lerp(1.15, 1.25, t)
       } else if (smoothScrollP < 0.75) {
         const t = (smoothScrollP - 0.5) / 0.25
-        targetX = lerp(2.2, 0, t)
-        targetY = lerp(0.4, 0, t)
+        targetX = lerp(2.0, 0, t)
+        targetY = lerp(0.3, 0, t)
         targetZ = lerp(0.8, 1.5, t)
         targetScale = lerp(1.25, 1.4, t)
       } else {
         const t = (smoothScrollP - 0.75) / 0.25
         targetX = lerp(0, 0, t)
-        targetY = lerp(0, -0.3, t)
-        targetZ = lerp(1.5, 2.6, t)
-        targetScale = lerp(1.4, 1.75, t)
+        targetY = lerp(0, -0.2, t)
+        targetZ = lerp(1.5, 2.5, t)
+        targetScale = lerp(1.4, 1.7, t)
       }
 
       modelGroup.position.x = lerp(modelGroup.position.x, targetX + mouseX * 0.4, 0.08)
@@ -220,10 +205,6 @@ export default function ThreeCanvasBackground() {
       modelGroup.rotation.x = elapsedTime * 0.25 + smoothScrollP * Math.PI * 2 + mouseY * 0.4
       modelGroup.rotation.y = elapsedTime * 0.35 + smoothScrollP * Math.PI * 3 + mouseX * 0.4
       modelGroup.rotation.z = smoothScrollP * Math.PI
-
-      // Counter-rotate outer rings
-      ringMesh1.rotation.z = elapsedTime * 0.4
-      ringMesh2.rotation.y = -elapsedTime * 0.5
 
       particleSystem.rotation.y = -elapsedTime * 0.05 - smoothScrollP * 1.5
       particleSystem.rotation.x = Math.sin(elapsedTime * 0.08) * 0.15
@@ -255,8 +236,6 @@ export default function ThreeCanvasBackground() {
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
-      ringGeometry.dispose()
-      ringMaterial.dispose()
       particleGeometry.dispose()
       particleMaterial.dispose()
       renderer.dispose()

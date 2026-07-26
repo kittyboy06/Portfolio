@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * High-performance WebGL 3D Canvas Scene for Hero Card
- * Loads custom HORNET.glb model with orbiting rings and mouse-tilt interaction.
+ * Loads enlarged HORNET.glb model without wireframe rings.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -54,8 +54,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
         loadedModel.position.sub(center)
 
+        // ENLARGED scale factor (~3.8 units instead of 2.0)
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 2.0 / (maxDim || 1)
+        const targetScale = 3.8 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         loadedModel.traverse((child) => {
@@ -72,21 +73,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
         console.warn('Failed to load HORNET.glb:', error)
       }
     )
-
-    // Outer Orbiting Wireframe Rings
-    const ringGeometry = new THREE.TorusGeometry(2.1, 0.02, 16, 100)
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0xE85D3F,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.4
-    })
-    const ringMesh1 = new THREE.Mesh(ringGeometry, ringMaterial)
-    const ringMesh2 = new THREE.Mesh(ringGeometry, ringMaterial)
-    ringMesh2.rotation.x = Math.PI / 2
-
-    modelGroup.add(ringMesh1)
-    modelGroup.add(ringMesh2)
 
     // 4. 3D Orbiting Particle Constellation
     const particleCount = 300
@@ -122,7 +108,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     scene.add(particleSystem)
 
     // 5. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
     scene.add(ambientLight)
 
     const coralPointLight = new THREE.PointLight(0xE85D3F, 3.5, 10)
@@ -164,9 +150,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       modelGroup.rotation.y = elapsedTime * 0.35 + mouseX * 0.8
       modelGroup.rotation.z = Math.sin(elapsedTime * 0.5) * 0.2
 
-      ringMesh1.rotation.z = elapsedTime * 0.4
-      ringMesh2.rotation.y = -elapsedTime * 0.5
-
       particleSystem.rotation.y = -elapsedTime * 0.08
       particleSystem.rotation.x = Math.cos(elapsedTime * 0.05) * 0.1
 
@@ -194,8 +177,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
-      ringGeometry.dispose()
-      ringMaterial.dispose()
       particleGeometry.dispose()
       particleMaterial.dispose()
       renderer.dispose()
