@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { 
   Github, 
   ExternalLink, 
@@ -7,29 +7,34 @@ import {
   Landmark, 
   Laptop, 
   Cpu, 
-  Music
+  Music,
+  Brain,
+  Layers,
+  Smartphone,
+  Sparkles,
+  Code
 } from 'lucide-react'
 import ScrollReveal from './ScrollReveal'
 
-const getProjectIcon = (id) => {
-  switch (id) {
-    case 'arise-irl':
-      return Gamepad2
-    case 'neurocart':
-      return Cpu
-    case 'magic-embroidery':
-      return Landmark
-    case 'aash-player':
-      return Music
-    case 'brainos':
-      return Laptop
-    default:
-      return Box
-  }
+const getProjectIcon = (id, category) => {
+  if (id.includes('aether') || id.includes('signbridge') || id.includes('neurocart')) return Brain
+  if (category === 'Unity Games' || id.includes('fox') || id.includes('platformer') || id.includes('rpg')) return Gamepad2
+  if (category === 'Mobile App' || id.includes('arise') || id.includes('wardrobe') || id.includes('aash')) return Smartphone
+  if (id.includes('embroidery') || id.includes('attendance') || id.includes('valen')) return Landmark
+  if (id.includes('cipher') || id.includes('treasure') || id.includes('console')) return Laptop
+  return Box
 }
 
 export default function Projects({ projectsData }) {
+  const [activeCategory, setActiveCategory] = useState('All')
+
   if (!projectsData || projectsData.length === 0) return null
+
+  const categories = ['All', 'AI Systems', 'Web & PWA', 'Unity Games', 'Mobile App']
+
+  const filteredProjects = activeCategory === 'All'
+    ? projectsData
+    : projectsData.filter(p => p.category === activeCategory)
 
   const base = import.meta.env.BASE_URL || '/'
   const neurocartImg = `${base}neurocart_mockup.png`
@@ -43,23 +48,42 @@ export default function Projects({ projectsData }) {
         
         {/* Section Heading */}
         <ScrollReveal speed={0.8}>
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-8 md:mb-12">
             <span className="font-jakarta text-xs font-extrabold tracking-widest text-[#E85D3F] uppercase bg-[#E85D3F]/10 px-3 py-1 rounded border-2 border-[#E85D3F]/30">
-              Selected Work
+              Complete Portfolio Showcase
             </span>
             <h2 className="font-jakarta text-3xl md:text-5xl font-black text-[#1A1A1A] mt-3 uppercase tracking-tight">
-              Active Quests
+              Featured Quests & Projects ({projectsData.length})
             </h2>
             <div className="w-16 h-[4px] bg-[#E85D3F] mx-auto mt-4 rounded-full"></div>
           </div>
         </ScrollReveal>
 
+        {/* Category Filter Pills */}
+        <ScrollReveal delay={0.1}>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`font-jakarta text-xs font-extrabold uppercase tracking-wider px-4 py-2 rounded-full border-2 transition-all cursor-pointer ${
+                  activeCategory === cat
+                    ? 'bg-[#E85D3F] border-[#1A1A1A] text-white offset-shadow-black scale-105'
+                    : 'bg-white border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#F0EFEB]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
+
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {projectsData.map((project, index) => {
-            const IconComp = getProjectIcon(project.id)
+          {filteredProjects.map((project, index) => {
+            const IconComp = getProjectIcon(project.id, project.category)
             const isCompleted = project.status.toLowerCase() === 'completed'
-            const isFeatured = project.id === 'neurocart'
+            const isFeatured = project.id === 'neurocart' && activeCategory === 'All'
 
             if (isFeatured) {
               return (
@@ -161,20 +185,26 @@ export default function Projects({ projectsData }) {
 
             // Regular Cards
             return (
-              <ScrollReveal key={`grid-${project.id}`} delay={index * 0.08} speed={1 + (index % 3) * 0.08}>
+              <ScrollReveal key={`grid-${project.id}`} delay={index * 0.05} speed={1 + (index % 3) * 0.05}>
                 <div className="group relative flex flex-col justify-between h-full rounded-2xl border-2 border-[#1A1A1A] bg-white p-6 offset-shadow-black hover:bg-[#F0EFEB] overflow-hidden">
-                  {/* Status Badge */}
-                  <span 
-                    className={`absolute top-6 right-6 font-jakarta font-extrabold text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border-2 ${
-                      isCompleted 
-                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600'
-                        : 'bg-amber-500/10 border-amber-500/60 text-amber-600'
-                    }`}
-                  >
-                    {project.status}
-                  </span>
+                  {/* Status & Category Badge */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-jakarta font-extrabold text-[9px] uppercase tracking-wider text-[#4F46E5] bg-[#4F46E5]/10 px-2 py-0.5 rounded border border-[#4F46E5]/30">
+                      {project.category || 'Software'}
+                    </span>
 
-                  <div className="space-y-4 text-left">
+                    <span 
+                      className={`font-jakarta font-extrabold text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border-2 ${
+                        isCompleted 
+                          ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600'
+                          : 'bg-amber-500/10 border-amber-500/60 text-amber-600'
+                      }`}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 text-left mt-3">
                     <div className="p-2.5 rounded-lg border-2 border-[#1A1A1A] bg-[#FAFAF8] text-[#1A1A1A] w-max group-hover:bg-[#E85D3F] group-hover:text-white transition-colors duration-200">
                       <IconComp className="w-5 h-5" />
                     </div>
@@ -183,7 +213,7 @@ export default function Projects({ projectsData }) {
                       {project.title}
                     </h3>
 
-                    <p className="text-[#666666] font-sans text-xs md:text-sm leading-relaxed font-medium">
+                    <p className="text-[#666666] font-sans text-xs md:text-sm leading-relaxed font-medium line-clamp-3">
                       {project.description}
                     </p>
                   </div>
