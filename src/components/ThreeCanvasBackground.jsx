@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
- * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene (Morphing Polyhedron)
- * Replaces TorusKnot with an interactive 3D Morphing Geodesic Polyhedron (Icosahedron)
- * with animated vertex displacement, wireframe grid, and orbiting particle constellation.
+ * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with Custom Imported 3D Model (HORNET.glb)
+ * Loads HORNET.glb, centers and scales it dynamically, and binds mouse tilt + scroll camera scrubbing!
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -31,58 +31,68 @@ export default function ThreeCanvasBackground() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75))
     container.appendChild(renderer.domElement)
 
-    // 3. 3D Morphing Icosahedron Geometry
-    const baseGeometry = new THREE.IcosahedronGeometry(1.4, 3)
-    const positionAttribute = baseGeometry.attributes.position
-    const vertexCount = positionAttribute.count
+    // Main 3D Group
+    const modelGroup = new THREE.Group()
+    scene.add(modelGroup)
 
-    // Store original vertex positions for morphing calculations
-    const originalPositions = new Float32Array(vertexCount * 3)
-    for (let i = 0; i < vertexCount * 3; i++) {
-      originalPositions[i] = positionAttribute.array[i]
-    }
+    // 3. Load Custom HORNET.glb 3D Model
+    const base = import.meta.env.BASE_URL || '/'
+    const modelUrl = `${base}HORNET.glb`
 
-    // Outer Coral Wireframe Mesh
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
+    const loader = new GLTFLoader()
+    let loadedModel = null
+
+    loader.load(
+      modelUrl,
+      (gltf) => {
+        loadedModel = gltf.scene
+
+        // Auto-center and normalize scale of the 3D model
+        const box = new THREE.Box3().setFromObject(loadedModel)
+        const center = box.getCenter(new THREE.Vector3())
+        const size = box.getSize(new THREE.Vector3())
+
+        // Center geometry to origin
+        loadedModel.position.sub(center)
+
+        // Normalize scale to ~2.2 units
+        const maxDim = Math.max(size.x, size.y, size.z)
+        const targetScale = 2.2 / (maxDim || 1)
+        loadedModel.scale.set(targetScale, targetScale, targetScale)
+
+        // Enable shadows & metallic reflections
+        loadedModel.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true
+            child.receiveShadow = true
+          }
+        })
+
+        modelGroup.add(loadedModel)
+      },
+      undefined,
+      (error) => {
+        console.warn('Failed to load HORNET.glb, fallback geometry active:', error)
+      }
+    )
+
+    // Outer Orbiting Wireframe Rings for Aesthetic Accent
+    const ringGeometry = new THREE.TorusGeometry(2.4, 0.02, 16, 100)
+    const ringMaterial = new THREE.MeshBasicMaterial({
       color: 0xE85D3F,
       wireframe: true,
       transparent: true,
-      opacity: 0.55
-    })
-    const wireframeMesh = new THREE.Mesh(baseGeometry, wireframeMaterial)
-
-    // Inner Glowing Indigo Nucleus Mesh
-    const innerGeometry = new THREE.IcosahedronGeometry(1.1, 2)
-    const innerMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4F46E5,
-      roughness: 0.25,
-      metalness: 0.8,
-      transparent: true,
       opacity: 0.35
-    })
-    const innerMesh = new THREE.Mesh(innerGeometry, innerMaterial)
-
-    // Outer Orbiting Wireframe Rings
-    const ringGeometry = new THREE.TorusGeometry(2.1, 0.02, 16, 100)
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0x4F46E5,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.4
     })
     const ringMesh1 = new THREE.Mesh(ringGeometry, ringMaterial)
     const ringMesh2 = new THREE.Mesh(ringGeometry, ringMaterial)
     ringMesh2.rotation.x = Math.PI / 2
 
-    const polyGroup = new THREE.Group()
-    polyGroup.add(wireframeMesh)
-    polyGroup.add(innerMesh)
-    polyGroup.add(ringMesh1)
-    polyGroup.add(ringMesh2)
-    scene.add(polyGroup)
+    modelGroup.add(ringMesh1)
+    modelGroup.add(ringMesh2)
 
     // 4. 3D Orbiting Particle Constellation
-    const particleCount = 420
+    const particleCount = 450
     const particlePositions = new Float32Array(particleCount * 3)
     const particleColors = new Float32Array(particleCount * 3)
 
@@ -117,19 +127,19 @@ export default function ThreeCanvasBackground() {
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial)
     scene.add(particleSystem)
 
-    // 5. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
+    // 5. Lighting Setup for Light Theme
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
     scene.add(ambientLight)
 
-    const coralPointLight = new THREE.PointLight(0xE85D3F, 3.5, 10)
+    const coralPointLight = new THREE.PointLight(0xE85D3F, 4, 12)
     coralPointLight.position.set(3, 4, 5)
     scene.add(coralPointLight)
 
-    const indigoPointLight = new THREE.PointLight(0x4F46E5, 3.5, 10)
+    const indigoPointLight = new THREE.PointLight(0x4F46E5, 4, 12)
     indigoPointLight.position.set(-3, -4, 3)
     scene.add(indigoPointLight)
 
-    // 6. Interactive Mouse & Scroll Progress Tracking with Smoothing
+    // 6. Interactive Mouse & Scroll Target Tracking
     let targetMouseX = 0
     let targetMouseY = 0
     let mouseX = 0
@@ -151,7 +161,7 @@ export default function ThreeCanvasBackground() {
       return Math.max(0, Math.min(1, window.scrollY / totalScroll))
     }
 
-    // 7. Render Loop with Vertex Morphing
+    // 7. Render Loop
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -165,23 +175,6 @@ export default function ThreeCanvasBackground() {
       // Smooth mouse lerp
       mouseX += (targetMouseX - mouseX) * 0.05
       mouseY += (targetMouseY - mouseY) * 0.05
-
-      // Vertex Morphing / Pulsing Wave effect on outer icosahedron
-      const currentPositions = baseGeometry.attributes.position.array
-      for (let i = 0; i < vertexCount; i++) {
-        const vx = originalPositions[i * 3]
-        const vy = originalPositions[i * 3 + 1]
-        const vz = originalPositions[i * 3 + 2]
-
-        // 3D Sine wave distortion based on vertex position & time
-        const wave = Math.sin(elapsedTime * 2.5 + vx * 2 + vy * 2) * 0.15
-        const scale = 1 + wave
-
-        currentPositions[i * 3] = vx * scale
-        currentPositions[i * 3 + 1] = vy * scale
-        currentPositions[i * 3 + 2] = vz * scale
-      }
-      baseGeometry.attributes.position.needsUpdate = true
 
       // Calculate 3D Targets based on smoothScrollP (0.0 -> 1.0)
       let targetX = 0
@@ -215,21 +208,22 @@ export default function ThreeCanvasBackground() {
         targetScale = lerp(1.4, 1.75, t)
       }
 
-      polyGroup.position.x = lerp(polyGroup.position.x, targetX + mouseX * 0.4, 0.08)
-      polyGroup.position.y = lerp(polyGroup.position.y, targetY - mouseY * 0.4, 0.08)
-      polyGroup.position.z = lerp(polyGroup.position.z, targetZ, 0.08)
+      modelGroup.position.x = lerp(modelGroup.position.x, targetX + mouseX * 0.4, 0.08)
+      modelGroup.position.y = lerp(modelGroup.position.y, targetY - mouseY * 0.4, 0.08)
+      modelGroup.position.z = lerp(modelGroup.position.z, targetZ, 0.08)
 
-      polyGroup.scale.x = lerp(polyGroup.scale.x, targetScale, 0.08)
-      polyGroup.scale.y = lerp(polyGroup.scale.y, targetScale, 0.08)
-      polyGroup.scale.z = lerp(polyGroup.scale.z, targetScale, 0.08)
+      modelGroup.scale.x = lerp(modelGroup.scale.x, targetScale, 0.08)
+      modelGroup.scale.y = lerp(modelGroup.scale.y, targetScale, 0.08)
+      modelGroup.scale.z = lerp(modelGroup.scale.z, targetScale, 0.08)
 
-      polyGroup.rotation.x = elapsedTime * 0.3 + smoothScrollP * Math.PI * 2.5 + mouseY * 0.4
-      polyGroup.rotation.y = elapsedTime * 0.4 + smoothScrollP * Math.PI * 4 + mouseX * 0.4
-      polyGroup.rotation.z = smoothScrollP * Math.PI * 1.5
+      // Continuous 3D rotation & mouse tilt
+      modelGroup.rotation.x = elapsedTime * 0.25 + smoothScrollP * Math.PI * 2 + mouseY * 0.4
+      modelGroup.rotation.y = elapsedTime * 0.35 + smoothScrollP * Math.PI * 3 + mouseX * 0.4
+      modelGroup.rotation.z = smoothScrollP * Math.PI
 
       // Counter-rotate outer rings
-      ringMesh1.rotation.z = elapsedTime * 0.5
-      ringMesh2.rotation.y = -elapsedTime * 0.6
+      ringMesh1.rotation.z = elapsedTime * 0.4
+      ringMesh2.rotation.y = -elapsedTime * 0.5
 
       particleSystem.rotation.y = -elapsedTime * 0.05 - smoothScrollP * 1.5
       particleSystem.rotation.x = Math.sin(elapsedTime * 0.08) * 0.15
@@ -261,10 +255,6 @@ export default function ThreeCanvasBackground() {
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
-      baseGeometry.dispose()
-      wireframeMaterial.dispose()
-      innerGeometry.dispose()
-      innerMaterial.dispose()
       ringGeometry.dispose()
       ringMaterial.dispose()
       particleGeometry.dispose()

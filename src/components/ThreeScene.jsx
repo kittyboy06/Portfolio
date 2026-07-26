@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
- * High-performance WebGL 3D Canvas Scene powered by Three.js
- * Features a morphing interactive 3D Icosahedron geometry with orbiting rings,
- * particle constellation, and mouse-tilt interaction.
+ * High-performance WebGL 3D Canvas Scene for Hero Card
+ * Loads custom HORNET.glb model with orbiting rings and mouse-tilt interaction.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -31,57 +31,65 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
-    // 3. 3D Morphing Icosahedron Geometry
-    const baseGeometry = new THREE.IcosahedronGeometry(1.3, 3)
-    const positionAttribute = baseGeometry.attributes.position
-    const vertexCount = positionAttribute.count
+    // Main 3D Model Group
+    const modelGroup = new THREE.Group()
+    scene.add(modelGroup)
 
-    const originalPositions = new Float32Array(vertexCount * 3)
-    for (let i = 0; i < vertexCount * 3; i++) {
-      originalPositions[i] = positionAttribute.array[i]
-    }
+    // 3. Load Custom HORNET.glb 3D Model
+    const base = import.meta.env.BASE_URL || '/'
+    const modelUrl = `${base}HORNET.glb`
 
-    // Outer Coral Wireframe Material
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
+    const loader = new GLTFLoader()
+    let loadedModel = null
+
+    loader.load(
+      modelUrl,
+      (gltf) => {
+        loadedModel = gltf.scene
+
+        // Auto-center and normalize scale
+        const box = new THREE.Box3().setFromObject(loadedModel)
+        const center = box.getCenter(new THREE.Vector3())
+        const size = box.getSize(new THREE.Vector3())
+
+        loadedModel.position.sub(center)
+
+        const maxDim = Math.max(size.x, size.y, size.z)
+        const targetScale = 2.0 / (maxDim || 1)
+        loadedModel.scale.set(targetScale, targetScale, targetScale)
+
+        loadedModel.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true
+            child.receiveShadow = true
+          }
+        })
+
+        modelGroup.add(loadedModel)
+      },
+      undefined,
+      (error) => {
+        console.warn('Failed to load HORNET.glb:', error)
+      }
+    )
+
+    // Outer Orbiting Wireframe Rings
+    const ringGeometry = new THREE.TorusGeometry(2.1, 0.02, 16, 100)
+    const ringMaterial = new THREE.MeshBasicMaterial({
       color: 0xE85D3F,
       wireframe: true,
       transparent: true,
-      opacity: 0.75
-    })
-    const wireframeMesh = new THREE.Mesh(baseGeometry, wireframeMaterial)
-
-    // Inner Solid Indigo Mesh
-    const innerGeometry = new THREE.IcosahedronGeometry(1.0, 2)
-    const innerMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4F46E5,
-      roughness: 0.2,
-      metalness: 0.8,
-      transparent: true,
-      opacity: 0.35
-    })
-    const innerMesh = new THREE.Mesh(innerGeometry, innerMaterial)
-
-    // Outer Orbiting Wireframe Rings
-    const ringGeometry = new THREE.TorusGeometry(1.9, 0.02, 16, 100)
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0x4F46E5,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.5
+      opacity: 0.4
     })
     const ringMesh1 = new THREE.Mesh(ringGeometry, ringMaterial)
     const ringMesh2 = new THREE.Mesh(ringGeometry, ringMaterial)
     ringMesh2.rotation.x = Math.PI / 2
 
-    const polyGroup = new THREE.Group()
-    polyGroup.add(wireframeMesh)
-    polyGroup.add(innerMesh)
-    polyGroup.add(ringMesh1)
-    polyGroup.add(ringMesh2)
-    scene.add(polyGroup)
+    modelGroup.add(ringMesh1)
+    modelGroup.add(ringMesh2)
 
     // 4. 3D Orbiting Particle Constellation
-    const particleCount = 350
+    const particleCount = 300
     const particlePositions = new Float32Array(particleCount * 3)
     const particleColors = new Float32Array(particleCount * 3)
 
@@ -114,7 +122,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     scene.add(particleSystem)
 
     // 5. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4)
     scene.add(ambientLight)
 
     const coralPointLight = new THREE.PointLight(0xE85D3F, 3.5, 10)
@@ -151,29 +159,13 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       mouseX += (targetMouseX - mouseX) * 0.05
       mouseY += (targetMouseY - mouseY) * 0.05
 
-      // Vertex Morphing Wave
-      const currentPositions = baseGeometry.attributes.position.array
-      for (let i = 0; i < vertexCount; i++) {
-        const vx = originalPositions[i * 3]
-        const vy = originalPositions[i * 3 + 1]
-        const vz = originalPositions[i * 3 + 2]
-
-        const wave = Math.sin(elapsedTime * 2.5 + vx * 2 + vy * 2) * 0.15
-        const scale = 1 + wave
-
-        currentPositions[i * 3] = vx * scale
-        currentPositions[i * 3 + 1] = vy * scale
-        currentPositions[i * 3 + 2] = vz * scale
-      }
-      baseGeometry.attributes.position.needsUpdate = true
-
       // Continuous rotation + mouse tilt
-      polyGroup.rotation.x = elapsedTime * 0.35 + mouseY * 0.8
-      polyGroup.rotation.y = elapsedTime * 0.45 + mouseX * 0.8
-      polyGroup.rotation.z = Math.sin(elapsedTime * 0.5) * 0.2
+      modelGroup.rotation.x = elapsedTime * 0.25 + mouseY * 0.8
+      modelGroup.rotation.y = elapsedTime * 0.35 + mouseX * 0.8
+      modelGroup.rotation.z = Math.sin(elapsedTime * 0.5) * 0.2
 
-      ringMesh1.rotation.z = elapsedTime * 0.5
-      ringMesh2.rotation.y = -elapsedTime * 0.6
+      ringMesh1.rotation.z = elapsedTime * 0.4
+      ringMesh2.rotation.y = -elapsedTime * 0.5
 
       particleSystem.rotation.y = -elapsedTime * 0.08
       particleSystem.rotation.x = Math.cos(elapsedTime * 0.05) * 0.1
@@ -202,10 +194,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
-      baseGeometry.dispose()
-      wireframeMaterial.dispose()
-      innerGeometry.dispose()
-      innerMaterial.dispose()
       ringGeometry.dispose()
       ringMaterial.dispose()
       particleGeometry.dispose()
