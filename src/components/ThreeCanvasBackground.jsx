@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with mouse.glb Model
- * Auto-centers mouse.glb, normalizes scale, and binds mouse tilt + scroll camera scrubbing!
+ * Rotation is clamped to front-facing angles so the back of the model is never exposed.
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -55,9 +55,9 @@ export default function ThreeCanvasBackground() {
         // Center geometry to origin
         loadedModel.position.sub(center)
 
-        // Scale factor (~4.5 units for full view)
+        // Scale factor (~3.5 units for full view)
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 4.5 / (maxDim || 1)
+        const targetScale = 3.5 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         // Enable shadows & metallic reflections
@@ -77,7 +77,7 @@ export default function ThreeCanvasBackground() {
     )
 
     // 4. 3D Orbiting Particle Constellation
-    const particleCount = 450
+    const particleCount = 400
     const particlePositions = new Float32Array(particleCount * 3)
     const particleColors = new Float32Array(particleCount * 3)
 
@@ -146,7 +146,7 @@ export default function ThreeCanvasBackground() {
       return Math.max(0, Math.min(1, window.scrollY / totalScroll))
     }
 
-    // 7. Render Loop
+    // 7. Render Loop (Clamped front-facing angles)
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -201,10 +201,10 @@ export default function ThreeCanvasBackground() {
       modelGroup.scale.y = lerp(modelGroup.scale.y, targetScale, 0.08)
       modelGroup.scale.z = lerp(modelGroup.scale.z, targetScale, 0.08)
 
-      // Continuous 3D rotation & mouse tilt
-      modelGroup.rotation.x = elapsedTime * 0.25 + smoothScrollP * Math.PI * 2 + mouseY * 0.4
-      modelGroup.rotation.y = elapsedTime * 0.35 + smoothScrollP * Math.PI * 3 + mouseX * 0.4
-      modelGroup.rotation.z = smoothScrollP * Math.PI
+      // CLAMPED ROTATION: Only tilt subtly so the back is NEVER exposed
+      modelGroup.rotation.x = Math.sin(elapsedTime * 0.6) * 0.12 + mouseY * 0.35
+      modelGroup.rotation.y = Math.cos(elapsedTime * 0.5) * 0.18 + mouseX * 0.45
+      modelGroup.rotation.z = Math.sin(elapsedTime * 0.4) * 0.05
 
       particleSystem.rotation.y = -elapsedTime * 0.05 - smoothScrollP * 1.5
       particleSystem.rotation.x = Math.sin(elapsedTime * 0.08) * 0.15

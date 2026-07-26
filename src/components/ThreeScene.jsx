@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
- * High-performance WebGL 3D Canvas Scene for Hero Card
- * Loads mouse.glb 3D model with mouse-tilt interaction.
+ * Interactive WebGL 3D Canvas Scene for Hero Card with OrbitControls.
+ * Allows user click-and-drag rotation control, constrained to front-facing angles
+ * to ensure the model's back is never exposed.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -18,10 +20,10 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     const height = container.clientHeight || 400
 
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
-    camera.position.z = 4.2
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
+    camera.position.set(0, 0.2, 4.2)
 
-    // 2. WebGL Renderer with Alpha & Antialiasing
+    // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({ 
       alpha: true, 
       antialias: true,
@@ -31,11 +33,24 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
+    // 3. User Interactive OrbitControls (Clamped to Front Face)
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
+    controls.dampingFactor = 0.08
+    controls.enableZoom = false  // Keep scale fixed inside card
+    controls.enablePan = false   // Keep position centered inside card
+    
+    // Clamp rotation angles so the back of the model is NEVER shown
+    controls.minAzimuthAngle = -Math.PI / 3  // -60 deg left
+    controls.maxAzimuthAngle = Math.PI / 3   // +60 deg right
+    controls.minPolarAngle = Math.PI / 3.2   // Tilt up limit
+    controls.maxPolarAngle = Math.PI / 1.8   // Tilt down limit
+
     // Main 3D Model Group
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    // 3. Load Custom mouse.glb 3D Model
+    // 4. Load Custom mouse.glb 3D Model
     const base = import.meta.env.BASE_URL || '/'
     const modelUrl = `${base}mouse.glb`
 
@@ -55,7 +70,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
         loadedModel.position.sub(center)
 
         const maxDim = Math.max(size.x, size.y, size.z)
-        const targetScale = 3.8 / (maxDim || 1)
+        const targetScale = 2.8 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
 
         loadedModel.traverse((child) => {
@@ -73,8 +88,8 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       }
     )
 
-    // 4. 3D Orbiting Particle Constellation
-    const particleCount = 300
+    // 5. 3D Orbiting Particle Constellation
+    const particleCount = 280
     const particlePositions = new Float32Array(particleCount * 3)
     const particleColors = new Float32Array(particleCount * 3)
 
@@ -82,9 +97,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     const colorIndigo = new THREE.Color(0x4F46E5)
 
     for (let i = 0; i < particleCount; i++) {
-      particlePositions[i * 3] = (Math.random() - 0.5) * 12
-      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 12
-      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 12
+      particlePositions[i * 3] = (Math.random() - 0.5) * 10
+      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 10
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 10
 
       const mixedColor = colorCoral.clone().lerp(colorIndigo, Math.random())
       particleColors[i * 3] = mixedColor.r
@@ -97,42 +112,28 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3))
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.045,
+      size: 0.04,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.8
     })
 
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial)
     scene.add(particleSystem)
 
-    // 5. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6)
+    // 6. Lighting Setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8)
     scene.add(ambientLight)
 
-    const coralPointLight = new THREE.PointLight(0xE85D3F, 3.5, 10)
-    coralPointLight.position.set(2, 3, 4)
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1.5)
+    mainLight.position.set(2, 4, 5)
+    scene.add(mainLight)
+
+    const coralPointLight = new THREE.PointLight(0xE85D3F, 3, 10)
+    coralPointLight.position.set(2, 2, 3)
     scene.add(coralPointLight)
 
-    const indigoPointLight = new THREE.PointLight(0x4F46E5, 3.5, 10)
-    indigoPointLight.position.set(-2, -3, 2)
-    scene.add(indigoPointLight)
-
-    // 6. Interactive Mouse Target Tracking
-    let targetMouseX = 0
-    let targetMouseY = 0
-    let mouseX = 0
-    let mouseY = 0
-
-    const handleMouseMove = (e) => {
-      const { innerWidth, innerHeight } = window
-      targetMouseX = (e.clientX / innerWidth - 0.5) * 2
-      targetMouseY = (e.clientY / innerHeight - 0.5) * 2
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-
-    // 7. Animation Render Loop
+    // 7. Animation Render Loop (No automatic 360° spin, user controls rotation)
     let animationFrameId
     let clock = new THREE.Clock()
 
@@ -140,17 +141,15 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       animationFrameId = requestAnimationFrame(animate)
       const elapsedTime = clock.getElapsedTime()
 
-      // Smooth mouse lerp
-      mouseX += (targetMouseX - mouseX) * 0.05
-      mouseY += (targetMouseY - mouseY) * 0.05
+      // Update OrbitControls dampening
+      controls.update()
 
-      // Continuous rotation + mouse tilt
-      modelGroup.rotation.x = elapsedTime * 0.25 + mouseY * 0.8
-      modelGroup.rotation.y = elapsedTime * 0.35 + mouseX * 0.8
-      modelGroup.rotation.z = Math.sin(elapsedTime * 0.5) * 0.2
+      // Subtle gentle breathing movement without turning model around
+      if (modelGroup) {
+        modelGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.04
+      }
 
-      particleSystem.rotation.y = -elapsedTime * 0.08
-      particleSystem.rotation.x = Math.cos(elapsedTime * 0.05) * 0.1
+      particleSystem.rotation.y = -elapsedTime * 0.05
 
       renderer.render(scene, camera)
     }
@@ -170,9 +169,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
+      controls.dispose()
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
@@ -185,7 +184,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
   return (
     <div 
       ref={mountRef} 
-      className={`relative cursor-grab active:cursor-grabbing select-none ${className}`} 
+      className={`relative cursor-grab active:cursor-grabbing select-none pointer-events-auto ${className}`} 
     />
   )
 }
