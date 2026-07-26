@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
  * High-performance WebGL 3D Canvas Scene for Hero Card
- * Loads enlarged HORNET.glb model without wireframe rings.
+ * Loads mouse.glb 3D model with mouse-tilt interaction.
  */
 export default function ThreeScene({ className = "w-full h-full" }) {
   const mountRef = useRef(null)
@@ -35,9 +35,9 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    // 3. Load Custom HORNET.glb 3D Model
+    // 3. Load Custom mouse.glb 3D Model
     const base = import.meta.env.BASE_URL || '/'
-    const modelUrl = `${base}HORNET.glb`
+    const modelUrl = `${base}mouse.glb`
 
     const loader = new GLTFLoader()
     let loadedModel = null
@@ -54,7 +54,6 @@ export default function ThreeScene({ className = "w-full h-full" }) {
 
         loadedModel.position.sub(center)
 
-        // ENLARGED scale factor (~3.8 units instead of 2.0)
         const maxDim = Math.max(size.x, size.y, size.z)
         const targetScale = 3.8 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
@@ -70,7 +69,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
       },
       undefined,
       (error) => {
-        console.warn('Failed to load HORNET.glb:', error)
+        console.warn('Failed to load mouse.glb:', error)
       }
     )
 
@@ -108,7 +107,7 @@ export default function ThreeScene({ className = "w-full h-full" }) {
     scene.add(particleSystem)
 
     // 5. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6)
     scene.add(ambientLight)
 
     const coralPointLight = new THREE.PointLight(0xE85D3F, 3.5, 10)

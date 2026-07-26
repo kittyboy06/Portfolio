@@ -3,8 +3,8 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 /**
- * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with Custom HORNET.glb Model
- * Enlarged 3D model scale with wireframe rings removed.
+ * Full-Viewport Scroll-Driven 3D WebGL Canvas Scene with mouse.glb Model
+ * Auto-centers mouse.glb, normalizes scale, and binds mouse tilt + scroll camera scrubbing!
  */
 export default function ThreeCanvasBackground() {
   const mountRef = useRef(null)
@@ -35,9 +35,9 @@ export default function ThreeCanvasBackground() {
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    // 3. Load Custom HORNET.glb 3D Model
+    // 3. Load Custom mouse.glb 3D Model
     const base = import.meta.env.BASE_URL || '/'
-    const modelUrl = `${base}HORNET.glb`
+    const modelUrl = `${base}mouse.glb`
 
     const loader = new GLTFLoader()
     let loadedModel = null
@@ -55,7 +55,7 @@ export default function ThreeCanvasBackground() {
         // Center geometry to origin
         loadedModel.position.sub(center)
 
-        // ENLARGED scale factor (~4.5 units instead of 2.2)
+        // Scale factor (~4.5 units for full view)
         const maxDim = Math.max(size.x, size.y, size.z)
         const targetScale = 4.5 / (maxDim || 1)
         loadedModel.scale.set(targetScale, targetScale, targetScale)
@@ -72,7 +72,7 @@ export default function ThreeCanvasBackground() {
       },
       undefined,
       (error) => {
-        console.warn('Failed to load HORNET.glb:', error)
+        console.warn('Failed to load mouse.glb:', error)
       }
     )
 
@@ -113,7 +113,7 @@ export default function ThreeCanvasBackground() {
     scene.add(particleSystem)
 
     // 5. Lighting Setup for Light Theme
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6)
     scene.add(ambientLight)
 
     const coralPointLight = new THREE.PointLight(0xE85D3F, 4, 12)
